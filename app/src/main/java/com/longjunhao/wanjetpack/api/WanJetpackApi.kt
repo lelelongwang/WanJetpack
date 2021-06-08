@@ -1,16 +1,13 @@
 package com.longjunhao.wanjetpack.api
 
-import androidx.lifecycle.LiveData
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.longjunhao.wanjetpack.data.HomeArticleResponse
-import com.longjunhao.wanjetpack.data.WendaResponse
-import com.longjunhao.wanjetpack.data.project.ProjectArticleResponse
-import com.longjunhao.wanjetpack.data.project.ProjectResponse
+import com.longjunhao.wanjetpack.data.HomeArticle
+import com.longjunhao.wanjetpack.data.Wenda
+import com.longjunhao.wanjetpack.data.project.ProjectArticle
+import com.longjunhao.wanjetpack.data.project.ProjectCategory
 import com.longjunhao.wanjetpack.data.wechat.Wechat
-import com.longjunhao.wanjetpack.data.wechat.WechatArticleResponse
-import com.longjunhao.wanjetpack.data.wechat.WechatResponse
+import com.longjunhao.wanjetpack.data.wechat.WechatArticle
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.flow.Flow
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -33,7 +30,7 @@ interface WanJetpackApi {
     @GET("/article/list/{page}/json")
     suspend fun getHomeArticle(
         @Path("page") page: Int
-    ): HomeArticleResponse
+    ): WanJetResponse<ApiPage<HomeArticle>>
 
     /**
      * 获取问答列表
@@ -41,13 +38,13 @@ interface WanJetpackApi {
     @GET("/wenda/list/{page}/json")
     suspend fun getWenda(
         @Path("page") page: Int
-    ): WendaResponse
+    ): WanJetResponse<ApiPage<Wenda>>
 
     /**
      * 获取项目分类列表
      */
     @GET("/project/tree/json")
-    fun getProjectCategory(): Deferred<ProjectResponse>
+    fun getProjectCategory(): Deferred<WanJetResponse<List<ProjectCategory>>>
 
     /**
      * 获取项目列表数据
@@ -56,13 +53,13 @@ interface WanJetpackApi {
     suspend fun getProjectArticle(
         @Path("page") page: Int,
         @Query("cid") cid: Int
-    ): ProjectArticleResponse
+    ): WanJetResponse<ApiPage<ProjectArticle>>
 
     /**
      * 获取公众号列表
      */
     @GET("/wxarticle/chapters/json")
-    fun getWechatName(): Deferred<WechatResponse>
+    fun getWechatName(): Deferred<WanJetResponse<List<Wechat>>>
 
     /**
      * 获取某个公众号历史数据
@@ -71,7 +68,7 @@ interface WanJetpackApi {
     suspend fun getWechatArticle(
         @Path("id") id: Int,
         @Path("page") page: Int
-    ): WechatArticleResponse
+    ): WanJetResponse<ApiPage<WechatArticle>>
 
 
     companion object {

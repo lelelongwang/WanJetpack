@@ -3,15 +3,16 @@ package com.longjunhao.wanjetpack.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.longjunhao.wanjetpack.api.WanJetResponse
 import com.longjunhao.wanjetpack.api.WanJetpackApi
 import com.longjunhao.wanjetpack.data.home.HomeArticlePagingSource
 import com.longjunhao.wanjetpack.data.home.WendaPagingSource
 import com.longjunhao.wanjetpack.data.project.ProjectArticle
+import com.longjunhao.wanjetpack.data.project.ProjectCategory
 import com.longjunhao.wanjetpack.data.project.ProjectPagingSource
-import com.longjunhao.wanjetpack.data.project.ProjectResponse
+import com.longjunhao.wanjetpack.data.wechat.Wechat
 import com.longjunhao.wanjetpack.data.wechat.WechatArticle
 import com.longjunhao.wanjetpack.data.wechat.WechatArticlePagingSource
-import com.longjunhao.wanjetpack.data.wechat.WechatResponse
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -48,7 +49,7 @@ class WanJetpackRepository @Inject constructor(
         ).flow
     }
 
-    fun getProjectCategory(): Deferred<ProjectResponse> {
+    fun getProjectCategory(): Deferred<WanJetResponse<List<ProjectCategory>>> {
         return api.getProjectCategory()
     }
 
@@ -59,7 +60,7 @@ class WanJetpackRepository @Inject constructor(
         ).flow
     }
 
-    fun getWechatName(): Deferred<WechatResponse> {
+    fun getWechatName(): Deferred<WanJetResponse<List<Wechat>>> {
         return api.getWechatName()
     }
 
