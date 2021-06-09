@@ -60,6 +60,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation('com.squareup.retrofit2:converter-gson:2.9.0')
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    //不用LiveData，用协程时需要引入下面依赖。
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
     //? by viewModels

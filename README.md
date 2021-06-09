@@ -9,6 +9,7 @@ WanJetpack
     - 持有可被观察的类类似于**EventBus**或者**RxJava**。LiveData是一种可感知生命周期的组件
     - LiveData与MutableLiveData区别：
     - [LiveData使用](https://www.jianshu.com/p/c69a7db3299a)
+    - 关于Retrofit和LiveData相关参考demo：GithubBrowserSample[]
 - [ViewModels]()
 - [Data Binding]()
     - 取代findviewbyId，类似于**Butterknife**。
@@ -22,9 +23,16 @@ WanJetpack
 - [App Startup]()
 - [WorkManager]()
 - [compose]()
-
-- [底部导航栏1](https://www.jianshu.com/p/8ec9f0185777)
-- [底部导航栏2](https://www.jianshu.com/p/729375b932fe)
+- [Preference]
+    - [Jetpack Preference库](https://developer.android.google.cn/jetpack/androidx/releases/preference?hl=zh_cn)
+    - [Preference指南](https://developer.android.google.cn/guide/topics/ui/settings?hl=zh_cn)
+    - 参考官方demo：[PreferencesKotlin](https://github.com/android/user-interface-samples/tree/master/PreferencesKotlin)
+- [Navigation]
+    - [Jetpack 之 Navigation 全面剖析](https://mp.weixin.qq.com/s/qgNbxgB-6qrFzJflqaBUdg)
+    - [底部导航栏1](https://www.jianshu.com/p/8ec9f0185777)
+    - [底部导航栏2](https://www.jianshu.com/p/729375b932fe)
+    - **用户登录场景**[条件导航](https://developer.android.google.cn/guide/navigation/navigation-conditional)
+    - **用户登录场景**[Fragment间共享数据](https://developer.android.google.cn/topic/libraries/architecture/viewmodel)
 - [ViewPager2](https://github.com/android/views-widgets-samples/tree/main/ViewPager2)
 - [TabLayout]()
 - [BottomNavigationView]()

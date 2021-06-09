@@ -1,11 +1,12 @@
 package com.longjunhao.wanjetpack.ui.wechat
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
@@ -14,15 +15,10 @@ import com.longjunhao.wanjetpack.data.wechat.Wechat
 import com.longjunhao.wanjetpack.databinding.FragmentWechatBinding
 import com.longjunhao.wanjetpack.viewmodels.WechatViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import java.util.*
-import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class WechatFragment : Fragment() {
 
-    private var homeJob: Job? = null
     private val viewModel: WechatViewModel by viewModels()
     private lateinit var binding: FragmentWechatBinding
     val wechatId = ArrayList<Int>()
@@ -33,12 +29,14 @@ class WechatFragment : Fragment() {
     ): View {
         binding = FragmentWechatBinding.inflate(inflater,container,false)
 
-        homeJob?.cancel()
-        homeJob = lifecycleScope.launch(){
-            initViewPager(viewModel.wechatName.await().data)
-        }
-
+        subscribeUi()
         return binding.root
+    }
+
+    private fun subscribeUi() {
+        viewModel.wechatName.observe(viewLifecycleOwner, Observer {
+            initViewPager(it)
+        })
     }
 
     private fun initViewPager(chapters: List<Wechat>){

@@ -1,9 +1,10 @@
 package com.longjunhao.wanjetpack.data
 
+import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.longjunhao.wanjetpack.api.WanJetResponse
+import com.longjunhao.wanjetpack.api.ApiResponse
 import com.longjunhao.wanjetpack.api.WanJetpackApi
 import com.longjunhao.wanjetpack.data.home.HomeArticlePagingSource
 import com.longjunhao.wanjetpack.data.home.WendaPagingSource
@@ -49,7 +50,7 @@ class WanJetpackRepository @Inject constructor(
         ).flow
     }
 
-    fun getProjectCategory(): Deferred<WanJetResponse<List<ProjectCategory>>> {
+    fun getProjectCategory(): LiveData<ApiResponse<List<ProjectCategory>>> {
         return api.getProjectCategory()
     }
 
@@ -60,7 +61,7 @@ class WanJetpackRepository @Inject constructor(
         ).flow
     }
 
-    fun getWechatName(): Deferred<WanJetResponse<List<Wechat>>> {
+    fun getWechatName(): LiveData<ApiResponse<List<Wechat>>> {
         return api.getWechatName()
     }
 

@@ -18,13 +18,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 @AndroidEntryPoint
 class ProjectFragment : Fragment() {
 
     private var homeJob: Job? = null
-    private var homeJob2: Job? = null
     private val viewModel: ProjectViewModel by viewModels()
     private lateinit var binding: FragmentProjectBinding
 
@@ -45,21 +43,19 @@ class ProjectFragment : Fragment() {
     }
 
     private fun subscribeUi(categoryAdapter: ProjectCategoryAdapter,adapter: ProjectAdapter){
-        homeJob?.cancel()
-        homeJob = lifecycleScope.launch {
-            val categoryList = viewModel.projectCategory.await().data
-            categoryAdapter.submitList(categoryList)
-            viewModel.currentSelectedItem.postValue(categoryList[0])
-            viewModel.currentSelectedItem.observe(viewLifecycleOwner, Observer {
-                Log.d("TAG", "subscribeUi: ljh it${it.id}+ name${it.name}")
-                updateSelectItem(adapter,it)
-            })
-        }
+        viewModel.projectCategory.observe(viewLifecycleOwner, Observer {
+            categoryAdapter.submitList(it)
+            viewModel.currentSelectedItem.postValue(it[0])
+        })
+        viewModel.currentSelectedItem.observe(viewLifecycleOwner, Observer {
+            Log.d("TAG", "subscribeUi: ljh it${it.id}+ name${it.name}")
+            updateSelectItem(adapter,it)
+        })
     }
 
     private fun updateSelectItem(adapter: ProjectAdapter, projectCategory: ProjectCategory) {
-        homeJob2?.cancel()
-        homeJob2 = lifecycleScope.launch {
+        homeJob?.cancel()
+        homeJob = lifecycleScope.launch {
             //TODO toolbarText的值尽量在xml中设置
             binding.toolbarText.text = projectCategory.name
             viewModel.getProjectArticle(projectCategory.id).collectLatest {

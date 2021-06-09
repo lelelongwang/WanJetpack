@@ -1,6 +1,8 @@
 package com.longjunhao.wanjetpack.api
 
+import androidx.lifecycle.LiveData
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.longjunhao.wanjetpack.data.ApiPage
 import com.longjunhao.wanjetpack.data.HomeArticle
 import com.longjunhao.wanjetpack.data.Wenda
 import com.longjunhao.wanjetpack.data.project.ProjectArticle
@@ -44,7 +46,7 @@ interface WanJetpackApi {
      * 获取项目分类列表
      */
     @GET("/project/tree/json")
-    fun getProjectCategory(): Deferred<WanJetResponse<List<ProjectCategory>>>
+    fun getProjectCategory(): LiveData<ApiResponse<List<ProjectCategory>>>
 
     /**
      * 获取项目列表数据
@@ -59,7 +61,7 @@ interface WanJetpackApi {
      * 获取公众号列表
      */
     @GET("/wxarticle/chapters/json")
-    fun getWechatName(): Deferred<WanJetResponse<List<Wechat>>>
+    fun getWechatName(): LiveData<ApiResponse<List<Wechat>>>
 
     /**
      * 获取某个公众号历史数据
@@ -81,11 +83,12 @@ interface WanJetpackApi {
                 .addInterceptor(logger)
                 .build()
 
+            //注意：如果只是用Paging、Flow不需要LiveDataCallAdapterFactory或CoroutineCallAdapterFactory。
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
+                .addCallAdapterFactory(LiveDataCallAdapterFactory())
                 .build()
                 .create(WanJetpackApi::class.java)
         }

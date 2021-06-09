@@ -1,10 +1,9 @@
 package com.longjunhao.wanjetpack.viewmodels
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.longjunhao.wanjetpack.api.AbsentLiveData
 import com.longjunhao.wanjetpack.data.WanJetpackRepository
 import com.longjunhao.wanjetpack.data.project.ProjectArticle
 import com.longjunhao.wanjetpack.data.project.ProjectCategory
@@ -30,7 +29,9 @@ class ProjectViewModel @Inject constructor(
         MutableLiveData<ProjectCategory>()
     }
 
-    val projectCategory = repository.getProjectCategory()
+    val projectCategory = repository.getProjectCategory().map {
+        it.data ?: ArrayList()
+    }
 
     fun getProjectArticle(categoryId: Int): Flow<PagingData<ProjectArticle>> {
         currentQueryValue = categoryId
