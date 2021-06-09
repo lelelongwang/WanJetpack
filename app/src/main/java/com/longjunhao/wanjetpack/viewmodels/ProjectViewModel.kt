@@ -3,7 +3,6 @@ package com.longjunhao.wanjetpack.viewmodels
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.longjunhao.wanjetpack.api.AbsentLiveData
 import com.longjunhao.wanjetpack.data.WanJetpackRepository
 import com.longjunhao.wanjetpack.data.project.ProjectArticle
 import com.longjunhao.wanjetpack.data.project.ProjectCategory
