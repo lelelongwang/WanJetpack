@@ -1,5 +1,6 @@
 package com.longjunhao.wanjetpack.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -11,10 +12,11 @@ import com.longjunhao.wanjetpack.data.home.WendaPagingSource
 import com.longjunhao.wanjetpack.data.project.ProjectArticle
 import com.longjunhao.wanjetpack.data.project.ProjectCategory
 import com.longjunhao.wanjetpack.data.project.ProjectPagingSource
+import com.longjunhao.wanjetpack.data.user.CollectionPagingSource
+import com.longjunhao.wanjetpack.data.user.User
 import com.longjunhao.wanjetpack.data.wechat.Wechat
 import com.longjunhao.wanjetpack.data.wechat.WechatArticle
 import com.longjunhao.wanjetpack.data.wechat.WechatArticlePagingSource
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,6 +36,7 @@ class WanJetpackRepository @Inject constructor(
         private const val WENDA_PAGE_SIZE = 23
         private const val PROJECT_PAGE_SIZE = 18
         private const val WECHAT_PAGE_SIZE = 20
+        private const val COLLECTION_ARTICLE_PAGE_SIZE = 20
     }
 
     fun getHomeArticle(): Flow<PagingData<HomeArticle>> {
@@ -69,6 +72,22 @@ class WanJetpackRepository @Inject constructor(
         return Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = WECHAT_PAGE_SIZE),
             pagingSourceFactory = { WechatArticlePagingSource(api, wechatId) }
+        ).flow
+    }
+
+    fun login(username: String, password: String): LiveData<ApiResponse<User>> {
+        Log.d("WanJetpackRepository", "login: ljh name=$username  pass=$password")
+        return api.login(username, password)
+    }
+
+    fun logout(): LiveData<ApiResponse<User>>{
+        return api.logout()
+    }
+
+    fun getCollectionArticle(): Flow<PagingData<ApiArticle>> {
+        return Pager(
+            config = PagingConfig(enablePlaceholders = false, pageSize = COLLECTION_ARTICLE_PAGE_SIZE),
+            pagingSourceFactory = { CollectionPagingSource(api) }
         ).flow
     }
 
