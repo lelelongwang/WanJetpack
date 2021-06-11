@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.longjunhao.wanjetpack.api
+package com.longjunhao.wanjetpack.data
 
 import com.google.gson.annotations.SerializedName
 

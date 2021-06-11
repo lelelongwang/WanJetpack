@@ -2,9 +2,7 @@ package com.longjunhao.wanjetpack.viewmodels
 
 import androidx.lifecycle.*
 import com.longjunhao.wanjetpack.data.WanJetpackRepository
-import com.longjunhao.wanjetpack.data.wechat.Wechat
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**

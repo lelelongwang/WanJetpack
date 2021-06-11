@@ -8,7 +8,7 @@
             type="android.view.View.OnClickListener"/>
         <variable
             name="wenda"
-            type="com.longjunhao.wanjetpack.data.Wenda" />
+            type="com.longjunhao.wanjetpack.data.ApiArticle" />
 
     </data>
 

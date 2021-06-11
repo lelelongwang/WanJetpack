@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.longjunhao.wanjetpack.R
-import com.longjunhao.wanjetpack.data.wechat.Wechat
+import com.longjunhao.wanjetpack.data.wechat.WechatCategory
 import com.longjunhao.wanjetpack.databinding.FragmentWechatBinding
 import com.longjunhao.wanjetpack.viewmodels.WechatViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +38,7 @@ class WechatFragment : Fragment() {
         })
     }
 
-    private fun initViewPager(chapters: List<Wechat>){
+    private fun initViewPager(chapters: List<WechatCategory>){
         if (chapters.isEmpty()) return
         val titles = arrayOfNulls<String>(chapters.size)
         chapters.forEachIndexed { index, wechat ->

@@ -2,7 +2,7 @@ package com.longjunhao.wanjetpack.data.home
 
 import androidx.paging.PagingSource
 import com.longjunhao.wanjetpack.api.WanJetpackApi
-import com.longjunhao.wanjetpack.data.Wenda
+import com.longjunhao.wanjetpack.data.ApiArticle
 
 /**
  * .WendaPagingSource
@@ -15,8 +15,8 @@ private const val WENDA_STARTING_PAGE_INDEX = 1
 
 class WendaPagingSource(
     private val api: WanJetpackApi
-) : PagingSource<Int, Wenda>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Wenda> {
+) : PagingSource<Int, ApiArticle>() {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ApiArticle> {
         val page = params.key ?: WENDA_STARTING_PAGE_INDEX
         return try {
             val response = api.getWenda(page)

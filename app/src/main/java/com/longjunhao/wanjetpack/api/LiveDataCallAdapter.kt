@@ -17,6 +17,7 @@
 package com.longjunhao.wanjetpack.api
 
 import androidx.lifecycle.LiveData
+import com.longjunhao.wanjetpack.data.ApiResponse
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Callback

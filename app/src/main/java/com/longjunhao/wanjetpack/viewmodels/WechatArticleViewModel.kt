@@ -4,9 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.data.WanJetpackRepository
-import com.longjunhao.wanjetpack.data.Wenda
-import com.longjunhao.wanjetpack.data.wechat.WechatArticle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -22,11 +21,11 @@ class WechatArticleViewModel @Inject constructor(
     private val repository: WanJetpackRepository
 ) : ViewModel() {
     private var currentIdValue: Int? = null
-    private var currentWechatResult: Flow<PagingData<WechatArticle>>? = null
+    private var currentWechatResult: Flow<PagingData<ApiArticle>>? = null
 
-    fun getWechatArticle(wechatId: Int): Flow<PagingData<WechatArticle>> {
+    fun getWechatArticle(wechatId: Int): Flow<PagingData<ApiArticle>> {
         currentIdValue = wechatId
-        val newResult: Flow<PagingData<WechatArticle>> =
+        val newResult: Flow<PagingData<ApiArticle>> =
             repository.getWechatArticle(wechatId).cachedIn(viewModelScope)
         currentWechatResult = newResult
         return newResult

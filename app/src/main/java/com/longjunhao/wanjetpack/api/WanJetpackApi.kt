@@ -2,15 +2,10 @@ package com.longjunhao.wanjetpack.api
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.longjunhao.wanjetpack.data.ApiArticle
-import com.longjunhao.wanjetpack.data.ApiPage
-import com.longjunhao.wanjetpack.data.HomeArticle
-import com.longjunhao.wanjetpack.data.Wenda
-import com.longjunhao.wanjetpack.data.project.ProjectArticle
+import com.longjunhao.wanjetpack.data.*
 import com.longjunhao.wanjetpack.data.project.ProjectCategory
 import com.longjunhao.wanjetpack.data.user.User
-import com.longjunhao.wanjetpack.data.wechat.Wechat
-import com.longjunhao.wanjetpack.data.wechat.WechatArticle
+import com.longjunhao.wanjetpack.data.wechat.WechatCategory
 import com.longjunhao.wanjetpack.util.SharedPrefObject
 import okhttp3.Cookie
 import okhttp3.CookieJar
@@ -23,7 +18,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
-import kotlin.math.log
 
 /**
  * .WanJetpackApi
@@ -39,7 +33,7 @@ interface WanJetpackApi {
     @GET("/article/list/{page}/json")
     suspend fun getHomeArticle(
         @Path("page") page: Int
-    ): WanJetResponse<ApiPage<HomeArticle>>
+    ): WanJetResponse<ApiPage<ApiArticle>>
 
     /**
      * 获取问答列表
@@ -47,7 +41,7 @@ interface WanJetpackApi {
     @GET("/wenda/list/{page}/json")
     suspend fun getWenda(
         @Path("page") page: Int
-    ): WanJetResponse<ApiPage<Wenda>>
+    ): WanJetResponse<ApiPage<ApiArticle>>
 
     /**
      * 获取项目分类列表
@@ -62,13 +56,13 @@ interface WanJetpackApi {
     suspend fun getProjectArticle(
         @Path("page") page: Int,
         @Query("cid") cid: Int
-    ): WanJetResponse<ApiPage<ProjectArticle>>
+    ): WanJetResponse<ApiPage<ApiArticle>>
 
     /**
      * 获取公众号列表
      */
     @GET("/wxarticle/chapters/json")
-    fun getWechatName(): LiveData<ApiResponse<List<Wechat>>>
+    fun getWechatName(): LiveData<ApiResponse<List<WechatCategory>>>
 
     /**
      * 获取某个公众号历史数据
@@ -77,7 +71,7 @@ interface WanJetpackApi {
     suspend fun getWechatArticle(
         @Path("id") id: Int,
         @Path("page") page: Int
-    ): WanJetResponse<ApiPage<WechatArticle>>
+    ): WanJetResponse<ApiPage<ApiArticle>>
 
     /**
      * 登录

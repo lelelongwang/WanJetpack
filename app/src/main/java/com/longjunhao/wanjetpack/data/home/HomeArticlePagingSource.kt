@@ -2,7 +2,7 @@ package com.longjunhao.wanjetpack.data.home
 
 import androidx.paging.PagingSource
 import com.longjunhao.wanjetpack.api.WanJetpackApi
-import com.longjunhao.wanjetpack.data.HomeArticle
+import com.longjunhao.wanjetpack.data.ApiArticle
 
 /**
  * .WanjetpackPagingSource
@@ -15,9 +15,9 @@ private const val ARTICLE_STARTING_PAGE_INDEX = 0
 
 class HomeArticlePagingSource(
     private val api: WanJetpackApi
-) : PagingSource<Int, HomeArticle>() {
+) : PagingSource<Int, ApiArticle>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, HomeArticle> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ApiArticle> {
         val page = params.key ?: ARTICLE_STARTING_PAGE_INDEX
         return try {
             val response = api.getHomeArticle(page)

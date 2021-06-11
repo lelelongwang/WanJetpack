@@ -2,6 +2,7 @@ package com.longjunhao.wanjetpack.data.wechat
 
 import androidx.paging.PagingSource
 import com.longjunhao.wanjetpack.api.WanJetpackApi
+import com.longjunhao.wanjetpack.data.ApiArticle
 
 /**
  * .WechatArticlePagingSource
@@ -15,9 +16,9 @@ private const val WECHAT_STARTING_PAGE_INDEX = 1
 class WechatArticlePagingSource(
     private val api: WanJetpackApi,
     private val wechatId: Int
-) : PagingSource<Int,WechatArticle>() {
+) : PagingSource<Int,ApiArticle>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, WechatArticle> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ApiArticle> {
         val page = params.key ?: WECHAT_STARTING_PAGE_INDEX
         return try {
             val response = api.getWechatArticle(wechatId, page)

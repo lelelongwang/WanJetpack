@@ -8,7 +8,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.longjunhao.wanjetpack.adapter.WechatAdapter.WechatViewHolder
-import com.longjunhao.wanjetpack.data.wechat.WechatArticle
+import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.databinding.ListItemWechatBinding
 
 /**
@@ -17,7 +17,7 @@ import com.longjunhao.wanjetpack.databinding.ListItemWechatBinding
  * @author Admitor
  * @date 2021/05/28
  */
-class WechatAdapter : PagingDataAdapter<WechatArticle, WechatViewHolder>(WechatDiffCallback()) {
+class WechatAdapter : PagingDataAdapter<ApiArticle, WechatViewHolder>(WechatDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WechatViewHolder {
         return WechatViewHolder(
@@ -49,7 +49,7 @@ class WechatAdapter : PagingDataAdapter<WechatArticle, WechatViewHolder>(WechatD
             }
         }
 
-        fun bind(item: WechatArticle) {
+        fun bind(item: ApiArticle) {
             binding.apply {
                 wechat = item
                 executePendingBindings()
@@ -58,12 +58,12 @@ class WechatAdapter : PagingDataAdapter<WechatArticle, WechatViewHolder>(WechatD
 
     }
 
-    private class WechatDiffCallback : DiffUtil.ItemCallback<WechatArticle>() {
-        override fun areItemsTheSame(oldItem: WechatArticle, newItem: WechatArticle): Boolean {
+    private class WechatDiffCallback : DiffUtil.ItemCallback<ApiArticle>() {
+        override fun areItemsTheSame(oldItem: ApiArticle, newItem: ApiArticle): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: WechatArticle, newItem: WechatArticle): Boolean {
+        override fun areContentsTheSame(oldItem: ApiArticle, newItem: ApiArticle): Boolean {
             return oldItem == newItem
         }
 

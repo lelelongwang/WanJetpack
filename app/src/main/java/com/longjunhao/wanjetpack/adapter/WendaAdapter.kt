@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.longjunhao.wanjetpack.data.Wenda
 import com.longjunhao.wanjetpack.adapter.WendaAdapter.WendaViewHolder
+import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.databinding.ListItemWendaBinding
 
 /**
@@ -17,7 +17,7 @@ import com.longjunhao.wanjetpack.databinding.ListItemWendaBinding
  * @author Admitor
  * @date 2021/05/25
  */
-class WendaAdapter : PagingDataAdapter<Wenda, WendaViewHolder>(WendaDiffCallback()) {
+class WendaAdapter : PagingDataAdapter<ApiArticle, WendaViewHolder>(WendaDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WendaViewHolder {
         return WendaViewHolder(
@@ -49,7 +49,7 @@ class WendaAdapter : PagingDataAdapter<Wenda, WendaViewHolder>(WendaDiffCallback
             }
         }
 
-        fun bind(item: Wenda) {
+        fun bind(item: ApiArticle) {
             binding.apply {
                 wenda = item
                 executePendingBindings()
@@ -58,12 +58,12 @@ class WendaAdapter : PagingDataAdapter<Wenda, WendaViewHolder>(WendaDiffCallback
 
     }
 
-    private class WendaDiffCallback : DiffUtil.ItemCallback<Wenda>() {
-        override fun areItemsTheSame(oldItem: Wenda, newItem: Wenda): Boolean {
+    private class WendaDiffCallback : DiffUtil.ItemCallback<ApiArticle>() {
+        override fun areItemsTheSame(oldItem: ApiArticle, newItem: ApiArticle): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Wenda, newItem: Wenda): Boolean {
+        override fun areContentsTheSame(oldItem: ApiArticle, newItem: ApiArticle): Boolean {
             return oldItem == newItem
         }
 

@@ -8,7 +8,7 @@
             type="android.view.View.OnClickListener"/>
         <variable
             name="wechat"
-            type="com.longjunhao.wanjetpack.data.wechat.WechatArticle" />
+            type="com.longjunhao.wanjetpack.data.ApiArticle" />
 
     </data>
 

@@ -5,17 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.longjunhao.wanjetpack.api.ApiResponse
 import com.longjunhao.wanjetpack.api.WanJetpackApi
 import com.longjunhao.wanjetpack.data.home.HomeArticlePagingSource
 import com.longjunhao.wanjetpack.data.home.WendaPagingSource
-import com.longjunhao.wanjetpack.data.project.ProjectArticle
 import com.longjunhao.wanjetpack.data.project.ProjectCategory
 import com.longjunhao.wanjetpack.data.project.ProjectPagingSource
 import com.longjunhao.wanjetpack.data.user.CollectionPagingSource
 import com.longjunhao.wanjetpack.data.user.User
-import com.longjunhao.wanjetpack.data.wechat.Wechat
-import com.longjunhao.wanjetpack.data.wechat.WechatArticle
+import com.longjunhao.wanjetpack.data.wechat.WechatCategory
 import com.longjunhao.wanjetpack.data.wechat.WechatArticlePagingSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -39,14 +36,14 @@ class WanJetpackRepository @Inject constructor(
         private const val COLLECTION_ARTICLE_PAGE_SIZE = 20
     }
 
-    fun getHomeArticle(): Flow<PagingData<HomeArticle>> {
+    fun getHomeArticle(): Flow<PagingData<ApiArticle>> {
         return Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = HOME_ARTICLE_PAGE_SIZE),
             pagingSourceFactory = { HomeArticlePagingSource(api) }
         ).flow
     }
 
-    fun getWenda(): Flow<PagingData<Wenda>> {
+    fun getWenda(): Flow<PagingData<ApiArticle>> {
         return Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = WENDA_PAGE_SIZE),
             pagingSourceFactory = { WendaPagingSource(api)}
@@ -57,18 +54,18 @@ class WanJetpackRepository @Inject constructor(
         return api.getProjectCategory()
     }
 
-    fun getProjectArticle(categoryId: Int): Flow<PagingData<ProjectArticle>> {
+    fun getProjectArticle(categoryId: Int): Flow<PagingData<ApiArticle>> {
         return Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = PROJECT_PAGE_SIZE),
             pagingSourceFactory = { ProjectPagingSource(api, categoryId) }
         ).flow
     }
 
-    fun getWechatName(): LiveData<ApiResponse<List<Wechat>>> {
+    fun getWechatName(): LiveData<ApiResponse<List<WechatCategory>>> {
         return api.getWechatName()
     }
 
-    fun getWechatArticle(wechatId: Int): Flow<PagingData<WechatArticle>> {
+    fun getWechatArticle(wechatId: Int): Flow<PagingData<ApiArticle>> {
         return Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = WECHAT_PAGE_SIZE),
             pagingSourceFactory = { WechatArticlePagingSource(api, wechatId) }

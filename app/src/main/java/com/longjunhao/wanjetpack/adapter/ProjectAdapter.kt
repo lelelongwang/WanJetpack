@@ -6,11 +6,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.longjunhao.wanjetpack.data.project.ProjectArticle
 import com.longjunhao.wanjetpack.databinding.ListItemProjectBinding
 import com.longjunhao.wanjetpack.adapter.ProjectAdapter.ProjectViewHolder
+import com.longjunhao.wanjetpack.data.ApiArticle
 
 /**
  * .ProjectAdapter
@@ -18,7 +17,7 @@ import com.longjunhao.wanjetpack.adapter.ProjectAdapter.ProjectViewHolder
  * @author Admitor
  * @date 2021/05/31
  */
-class ProjectAdapter : PagingDataAdapter<ProjectArticle, ProjectViewHolder>(ProjectDiffCallback()) {
+class ProjectAdapter : PagingDataAdapter<ApiArticle, ProjectViewHolder>(ProjectDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {
         return ProjectViewHolder(
@@ -50,7 +49,7 @@ class ProjectAdapter : PagingDataAdapter<ProjectArticle, ProjectViewHolder>(Proj
             }
         }
 
-        fun bind(item: ProjectArticle) {
+        fun bind(item: ApiArticle) {
             binding.apply {
                 project = item
                 executePendingBindings()
@@ -59,12 +58,12 @@ class ProjectAdapter : PagingDataAdapter<ProjectArticle, ProjectViewHolder>(Proj
     }
 }
 
-private class ProjectDiffCallback : DiffUtil.ItemCallback<ProjectArticle>(){
-    override fun areItemsTheSame(oldItem: ProjectArticle, newItem: ProjectArticle): Boolean {
+private class ProjectDiffCallback : DiffUtil.ItemCallback<ApiArticle>(){
+    override fun areItemsTheSame(oldItem: ApiArticle, newItem: ApiArticle): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: ProjectArticle, newItem: ProjectArticle): Boolean {
+    override fun areContentsTheSame(oldItem: ApiArticle, newItem: ApiArticle): Boolean {
         return oldItem == newItem
     }
 }
