@@ -1,34 +1,33 @@
 package com.longjunhao.wanjetpack.ui.user
 
 import android.os.Bundle
-import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.longjunhao.wanjetpack.R
-import com.longjunhao.wanjetpack.databinding.FragmentLoginBinding
+import com.longjunhao.wanjetpack.databinding.FragmentRegisterBinding
 import com.longjunhao.wanjetpack.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
+class RegisterFragment : Fragment() {
 
-    private lateinit var binding: FragmentLoginBinding
+    private lateinit var binding: FragmentRegisterBinding
     private val viewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
+        binding = FragmentRegisterBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.userModel = viewModel
 
-        Log.d("LoginFragment", "onCreateView: ljh isLogin="+viewModel.isLogin.value+"  username="+viewModel.username.value)
         subscribeUi()
         return binding.root
     }
@@ -37,26 +36,22 @@ class LoginFragment : Fragment() {
         binding.closeLogin.setOnClickListener {
             findNavController().navigateUp()
         }
-
-        binding.registerButton.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
-        }
-
         binding.setClickListener {
             val username = binding.username1.text.toString()
             val password = binding.password1.text.toString()
-            //viewModel.login.observe(viewLifecycleOwner, Observer {
+            val repassword = binding.repassword1.text.toString()
+            //viewModel.register.observe(viewLifecycleOwner, Observer {
             //todo 此处传参数是个不好的方案，应该不需要传参数。
-            viewModel.login(username, password).observe(viewLifecycleOwner, Observer {
-                Log.d("LoginFragment", "subscribeUi: ljh it=$it")
+            viewModel.register(username, password, repassword).observe(viewLifecycleOwner, Observer {
                 if (it != null) {
                     viewModel.name.postValue(it.username)
                     viewModel.user.postValue(it)
                     viewModel.isLogin.postValue(true)
-                    findNavController().navigateUp()
+                    //findNavController().navigateUp()
+                    findNavController().navigate(R.id.action_registerFragment_to_userFragment)
                 } else {
                     viewModel.isLogin.postValue(false)
-                    binding.password.error = getString(R.string.login_fail)
+                    binding.repassword.error = getString(R.string.register_fail)
                 }
             })
         }

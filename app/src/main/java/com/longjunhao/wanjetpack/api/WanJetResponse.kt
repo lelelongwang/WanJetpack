@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 /**
  * .WanJetResponse
- *
+ *  todo WanJetResponse要用ApiResponse代替
  * @author Admitor
  * @date 2021/06/08
  */

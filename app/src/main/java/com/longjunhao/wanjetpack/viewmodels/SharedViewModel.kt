@@ -1,13 +1,13 @@
 package com.longjunhao.wanjetpack.viewmodels
 
 //import com.longjunhao.wanjetpack.util.SharedPreferencesObject
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.longjunhao.wanjetpack.data.WanJetpackRepository
 import com.longjunhao.wanjetpack.data.user.User
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 /**
@@ -33,6 +33,13 @@ class SharedViewModel @Inject constructor(
      * 登录密码
      */
     val password: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
+    /**
+     * 确认登录密码
+     */
+    val repassword: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
@@ -67,6 +74,11 @@ class SharedViewModel @Inject constructor(
     fun login(username: String, password: String) = repository.login(username, password).map {
         if (it.errorCode == 0) it.data else null
     }
+
+    fun register(username: String, password: String, repassword: String) =
+        repository.register(username, password, repassword).map {
+            if (it.errorCode == 0) it.data else null
+        }
 
     val logout = repository.logout()
 }

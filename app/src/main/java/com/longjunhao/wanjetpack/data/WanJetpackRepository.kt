@@ -77,6 +77,10 @@ class WanJetpackRepository @Inject constructor(
         return api.login(username, password)
     }
 
+    fun register(username: String, password: String, repassword: String): LiveData<ApiResponse<User>> {
+        return api.register(username, password, repassword)
+    }
+
     fun logout(): LiveData<ApiResponse<User>>{
         return api.logout()
     }

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 /**
  * .Article
- *  todo: 此处需要优化代码，把所有的article都用这一个data，删除HomeArticle、Wenda、ProjectArticle、WechatArticle数据
+ *
  * @author Admitor
  * @date 2021/06/11
  */

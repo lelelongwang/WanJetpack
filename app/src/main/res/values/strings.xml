@@ -9,6 +9,7 @@
     <string name="tab_user">我</string>
     <string name="login">点击登录或注册</string>
     <string name="login_fail">账号或密码错误，请重新输入</string>
+    <string name="register_fail">注册错误，请重重新输入</string>
     <string name="logout">退出登录</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -2,7 +2,9 @@ package com.longjunhao.wanjetpack.api
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.longjunhao.wanjetpack.data.*
+import com.longjunhao.wanjetpack.data.ApiArticle
+import com.longjunhao.wanjetpack.data.ApiPage
+import com.longjunhao.wanjetpack.data.ApiResponse
 import com.longjunhao.wanjetpack.data.project.ProjectCategory
 import com.longjunhao.wanjetpack.data.user.User
 import com.longjunhao.wanjetpack.data.wechat.WechatCategory
@@ -81,7 +83,6 @@ interface WanJetpackApi {
         @Query("username") username: String,
         @Query("password") password: String
     ): LiveData<ApiResponse<User>>
-//    ): LiveData<ApiResponse<User>>
 
     /**
      * 注册成功和登录成功的json一样，通过判断errorCode即可。
@@ -145,7 +146,10 @@ class LocalCookie : CookieJar {
 
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         Log.d("LocalCookie", "saveFromResponse: ljh cookies=$cookies")
-        if (url.toString().startsWith("https://www.wanandroid.com/user/login?")) {
+        //如果注册新账号之后没有重新登录，则需要在注册时也要saveCookies
+        val isSaveCookies = url.toString().startsWith("https://www.wanandroid.com/user/login?")
+                || url.toString().startsWith("https://www.wanandroid.com/user/register?")
+        if (isSaveCookies) {
             SharedPrefObject.saveCookies(cookies)
         }
     }
