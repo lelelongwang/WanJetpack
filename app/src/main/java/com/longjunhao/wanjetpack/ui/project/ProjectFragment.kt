@@ -34,7 +34,7 @@ class ProjectFragment : Fragment() {
         binding = FragmentProjectBinding.inflate(inflater, container, false)
 
         val categoryAdapter = ProjectCategoryAdapter(viewModel)
-        val projectAdapter = ProjectAdapter()
+        val projectAdapter = ProjectAdapter(viewModel, viewLifecycleOwner)
         binding.projectCategoryList.adapter = categoryAdapter
         binding.projectList.adapter = projectAdapter
         subscribeUi(categoryAdapter, projectAdapter)

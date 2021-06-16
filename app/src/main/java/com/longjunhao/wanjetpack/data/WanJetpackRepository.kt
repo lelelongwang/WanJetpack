@@ -92,4 +92,12 @@ class WanJetpackRepository @Inject constructor(
         ).flow
     }
 
+    fun collect(id: Int): LiveData<ApiResponse<ApiArticle>> {
+        return api.collect(id)
+    }
+
+    fun unCollect(id: Int): LiveData<ApiResponse<ApiArticle>> {
+        return api.unCollect(id)
+    }
+
 }

@@ -30,7 +30,7 @@ class WendaFragment : Fragment() {
         val binding = FragmentWendaBinding.inflate(inflater,container,false)
         context ?: return binding.root
 
-        val adapter = WendaAdapter()
+        val adapter = WendaAdapter(viewModel, viewLifecycleOwner)
         binding.articleList.adapter = adapter
         subscribeUi(adapter)
 

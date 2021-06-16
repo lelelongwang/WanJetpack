@@ -102,12 +102,38 @@ interface WanJetpackApi {
     fun logout(): LiveData<ApiResponse<User>>
 
     /**
-     * 获取收藏列表，请求后的json和 获取首页文章列表一样。
+     * 获取收藏列表，请求后的json和 获取首页文章列表几乎一样。但是我的收藏获取的ApiArticle中没有"collect"字符串。
      */
     @GET("lg/collect/list/{page}/json")
     suspend fun getCollection(
         @Path("page") page: Int
     ): WanJetResponse<ApiPage<ApiArticle>>
+
+    /**
+     * 收藏站内文章：
+     * 1. 如果id已经收藏，还可以继续收藏（可能收藏时间不一样，待确认）。如果是错误的id，也能收藏成功，但是在登录成功返
+     * 回的json的collectIds是不存在错误的id的
+     * 2. 收藏返回的json为{"data":null,"errorCode":0,"errorMsg":""}，故返回值中的ApiArticle是随便写的
+     *
+     * todo 还有一种常见没有实现：收藏站外文章
+     */
+    @POST("lg/collect/{id}/json")
+    fun collect(
+        @Path("id") id: Int
+    ): LiveData<ApiResponse<ApiArticle>>
+
+    /**
+     * 文章列表 取消收藏：
+     * 1. 不管id是否在收藏列表，都可以取消收藏成功。即存在的id可以重复取消成功，不存在的id也可以取消成功
+     * 2. 取消收藏返回的json为{"data":null,"errorCode":0,"errorMsg":""}，故返回值中的ApiArticle是随便写的
+     *
+     * todo 还有一种常见没有实现：我的收藏页面（该页面包含自己录入的内容）取消收藏
+     * todo 网站、网址的收藏、编辑、删除没有实现
+     */
+    @POST("lg/uncollect_originId/{id}/json")
+    fun unCollect(
+        @Path("id") id: Int
+    ): LiveData<ApiResponse<ApiArticle>>
 
 
     companion object {

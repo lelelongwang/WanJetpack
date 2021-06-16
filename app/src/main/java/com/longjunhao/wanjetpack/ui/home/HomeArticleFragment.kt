@@ -29,7 +29,7 @@ class HomeArticleFragment : Fragment() {
         val binding = FragmentHomeArticleBinding.inflate(inflater,container,false)
         context ?: return binding.root
 
-        val adapter = HomeArticleAdapter()
+        val adapter = HomeArticleAdapter(viewModel, viewLifecycleOwner)
         binding.articleList.adapter = adapter
         subscribeUi(adapter)
 

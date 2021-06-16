@@ -28,4 +28,8 @@ class WendaViewModel @Inject constructor(
         currentWendaResult = newResult
         return newResult
     }
+
+    fun collect(id: Int) = repository.collect(id)
+
+    fun unCollect(id: Int) = repository.unCollect(id)
 }

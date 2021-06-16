@@ -39,4 +39,8 @@ class ProjectViewModel @Inject constructor(
         currentSearchResult = newResult
         return newResult
     }
+
+    fun collect(id: Int) = repository.collect(id)
+
+    fun unCollect(id: Int) = repository.unCollect(id)
 }

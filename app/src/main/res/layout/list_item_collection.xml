@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.text.TextUtils" alias="textUtlis" />
         <variable
             name="clickListener"
             type="android.view.View.OnClickListener"/>
@@ -39,6 +40,19 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
+                android:id="@+id/project_author"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@{!textUtlis.isEmpty(article.author) ? article.author : article.shareUser}"
+                android:textAppearance="?attr/textAppearanceListItemSecondary"
+                android:textColor="@android:color/secondary_text_dark"
+                android:gravity="center_horizontal"
+                app:layout_constraintStart_toStartOf="@id/article_title"
+                app:layout_constraintTop_toBottomOf="@id/article_title"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
                 android:id="@+id/article_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -47,8 +61,7 @@
                 android:textColor="@android:color/secondary_text_dark"
                 android:gravity="center_horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/article_title" />
+                app:layout_constraintTop_toTopOf="@id/project_author"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

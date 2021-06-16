@@ -37,7 +37,7 @@ class WechatArticleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentWechatArticleBinding.inflate(inflater,container,false)
-        val adapter = WechatAdapter()
+        val adapter = WechatAdapter(viewModel, viewLifecycleOwner)
         binding.articleList.adapter = adapter
         subscribeUi(adapter)
 

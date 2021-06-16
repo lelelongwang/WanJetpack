@@ -28,4 +28,14 @@ class HomeArticleViewModel @Inject constructor(
         currentArticleResult = newResult
         return newResult
     }
+
+    /**
+     * todo ：和adapter一样，重复的部分应该可以写在baseViewModel中
+     */
+    fun collect(id: Int) = repository.collect(id)
+
+    /**
+     * todo ：和adapter一样，重复的部分应该可以写在baseViewModel中
+     */
+    fun unCollect(id: Int) = repository.unCollect(id)
 }

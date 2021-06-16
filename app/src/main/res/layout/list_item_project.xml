@@ -36,6 +36,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:src="@{project.collect ? @drawable/ic_favorite_24 : @drawable/ic_favorite_border_24}"
+                app:layout_constraintTop_toTopOf="@id/project_pic"
+                app:layout_constraintEnd_toStartOf="@id/project_pic" />
+
             <TextView
                 android:id="@+id/project_title"
                 android:layout_width="0dp"
@@ -44,7 +53,7 @@
                 android:text="@{project.title}"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toStartOf="@id/project_pic"
+                app:layout_constraintEnd_toStartOf="@id/favorite"
                 app:layout_constraintTop_toTopOf="@id/project_pic"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -70,7 +79,8 @@
                 android:textColor="@android:color/secondary_text_dark"
                 android:gravity="center_horizontal"
                 app:layout_constraintStart_toStartOf="@id/project_title"
-                app:layout_constraintTop_toBottomOf="@id/project_desc" />
+                app:layout_constraintTop_toBottomOf="@id/project_desc"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
                 android:id="@+id/project_date"
@@ -81,7 +91,7 @@
                 android:textColor="@android:color/secondary_text_dark"
                 android:gravity="center_horizontal"
                 app:layout_constraintTop_toTopOf="@id/project_author"
-                app:layout_constraintEnd_toEndOf="@id/project_title" />
+                app:layout_constraintEnd_toStartOf="@id/project_pic" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
