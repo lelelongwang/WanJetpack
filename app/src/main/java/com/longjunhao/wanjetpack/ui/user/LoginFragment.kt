@@ -48,10 +48,9 @@ class LoginFragment : Fragment() {
             //viewModel.login.observe(viewLifecycleOwner, Observer {
             //todo 此处传参数是个不好的方案，应该不需要传参数。
             viewModel.login(username, password).observe(viewLifecycleOwner, Observer {
-                Log.d("LoginFragment", "subscribeUi: ljh it=$it")
-                if (it != null) {
-                    viewModel.name.postValue(it.username)
-                    viewModel.user.postValue(it)
+                if (it.errorCode == 0) {
+                    viewModel.name.postValue(it.data?.username)
+                    viewModel.user.postValue(it.data)
                     viewModel.isLogin.postValue(true)
                     findNavController().navigateUp()
                 } else {

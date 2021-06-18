@@ -16,11 +16,7 @@ class WechatViewModel @Inject constructor(
     private val repository: WanJetpackRepository
 ) : ViewModel() {
 
-    /**
-     * TODO: 1. 没有用LiveData，不知道需不需要, 2. 为什么没有用Transformations.map()和Transformations.switchMap(),3. LiveData用Flow替换了
-     *
-     */
-    val wechatName = repository.getWechatName().map {
-        it.data ?: ArrayList()
+    val wechatName = liveData {
+        emit( repository.getWechatName())
     }
 }

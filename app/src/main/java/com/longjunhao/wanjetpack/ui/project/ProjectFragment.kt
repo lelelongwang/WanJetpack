@@ -44,8 +44,10 @@ class ProjectFragment : Fragment() {
 
     private fun subscribeUi(categoryAdapter: ProjectCategoryAdapter,adapter: ProjectAdapter){
         viewModel.projectCategory.observe(viewLifecycleOwner, Observer {
-            categoryAdapter.submitList(it)
-            viewModel.currentSelectedItem.postValue(it[0])
+            if (it.errorCode == 0) {
+                categoryAdapter.submitList(it.data)
+                viewModel.currentSelectedItem.postValue(it.data?.get(0))
+            }
         })
         viewModel.currentSelectedItem.observe(viewLifecycleOwner, Observer {
             Log.d("TAG", "subscribeUi: ljh it${it.id}+ name${it.name}")

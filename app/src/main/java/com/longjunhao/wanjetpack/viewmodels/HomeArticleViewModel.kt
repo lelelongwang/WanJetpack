@@ -1,6 +1,7 @@
 package com.longjunhao.wanjetpack.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -32,10 +33,14 @@ class HomeArticleViewModel @Inject constructor(
     /**
      * todo ：和adapter一样，重复的部分应该可以写在baseViewModel中
      */
-    fun collect(id: Int) = repository.collect(id)
+    fun collect(id: Int) = liveData {
+        emit(repository.collect(id))
+    }
 
     /**
      * todo ：和adapter一样，重复的部分应该可以写在baseViewModel中
      */
-    fun unCollect(id: Int) = repository.unCollect(id)
+    fun unCollect(id: Int) = liveData {
+        emit(repository.unCollect(id))
+    }
 }

@@ -49,7 +49,7 @@ interface WanJetpackApi {
      * 获取项目分类列表
      */
     @GET("/project/tree/json")
-    fun getProjectCategory(): LiveData<ApiResponse<List<ProjectCategory>>>
+    suspend fun getProjectCategory(): ApiResponse<List<ProjectCategory>>
 
     /**
      * 获取项目列表数据
@@ -64,7 +64,7 @@ interface WanJetpackApi {
      * 获取公众号列表
      */
     @GET("/wxarticle/chapters/json")
-    fun getWechatName(): LiveData<ApiResponse<List<WechatCategory>>>
+    suspend fun getWechatName(): ApiResponse<List<WechatCategory>>
 
     /**
      * 获取某个公众号历史数据
@@ -79,27 +79,27 @@ interface WanJetpackApi {
      * 登录
      */
     @POST("/user/login")
-    fun login(
+    suspend fun login(
         @Query("username") username: String,
         @Query("password") password: String
-    ): LiveData<ApiResponse<User>>
+    ): ApiResponse<User>
 
     /**
      * 注册成功和登录成功的json一样，通过判断errorCode即可。
      */
     @POST("/user/register")
-    fun register(
+    suspend fun register(
         @Query("username") username: String,
         @Query("password") password: String,
         @Query("repassword") repassword: String
-    ): LiveData<ApiResponse<User>>
+    ): ApiResponse<User>
 
     /**
      * 退出,todo 清理cookie
      * 退出成功为是判断errorCode即可：{"data":null,"errorCode":0,"errorMsg":""}
      */
     @GET("/user/logout/json")
-    fun logout(): LiveData<ApiResponse<User>>
+    suspend fun logout(): ApiResponse<User>
 
     /**
      * 获取收藏列表，请求后的json和 获取首页文章列表几乎一样。但是我的收藏获取的ApiArticle中没有"collect"字符串。
@@ -118,9 +118,9 @@ interface WanJetpackApi {
      * todo 还有一种常见没有实现：收藏站外文章
      */
     @POST("lg/collect/{id}/json")
-    fun collect(
+    suspend fun collect(
         @Path("id") id: Int
-    ): LiveData<ApiResponse<ApiArticle>>
+    ): ApiResponse<ApiArticle>
 
     /**
      * 文章列表 取消收藏：
@@ -131,9 +131,9 @@ interface WanJetpackApi {
      * todo 网站、网址的收藏、编辑、删除没有实现
      */
     @POST("lg/uncollect_originId/{id}/json")
-    fun unCollect(
+    suspend fun unCollect(
         @Path("id") id: Int
-    ): LiveData<ApiResponse<ApiArticle>>
+    ): ApiResponse<ApiArticle>
 
 
     companion object {
@@ -149,11 +149,12 @@ interface WanJetpackApi {
                 .build()
 
             //注意：如果只是用Paging、Flow不需要LiveDataCallAdapterFactory或CoroutineCallAdapterFactory。
+            //其实用了协程后，是不需要添加addCallAdapterFactory的
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(LiveDataCallAdapterFactory())
+                //.addCallAdapterFactory(LiveDataCallAdapterFactory())
                 .build()
                 .create(WanJetpackApi::class.java)
         }

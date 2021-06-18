@@ -50,7 +50,7 @@ class WanJetpackRepository @Inject constructor(
         ).flow
     }
 
-    fun getProjectCategory(): LiveData<ApiResponse<List<ProjectCategory>>> {
+    suspend fun getProjectCategory(): ApiResponse<List<ProjectCategory>> {
         return api.getProjectCategory()
     }
 
@@ -61,7 +61,7 @@ class WanJetpackRepository @Inject constructor(
         ).flow
     }
 
-    fun getWechatName(): LiveData<ApiResponse<List<WechatCategory>>> {
+    suspend fun getWechatName(): ApiResponse<List<WechatCategory>> {
         return api.getWechatName()
     }
 
@@ -72,16 +72,16 @@ class WanJetpackRepository @Inject constructor(
         ).flow
     }
 
-    fun login(username: String, password: String): LiveData<ApiResponse<User>> {
+    suspend fun login(username: String, password: String): ApiResponse<User> {
         Log.d("WanJetpackRepository", "login: ljh name=$username  pass=$password")
         return api.login(username, password)
     }
 
-    fun register(username: String, password: String, repassword: String): LiveData<ApiResponse<User>> {
+    suspend fun register(username: String, password: String, repassword: String): ApiResponse<User> {
         return api.register(username, password, repassword)
     }
 
-    fun logout(): LiveData<ApiResponse<User>>{
+    suspend fun logout(): ApiResponse<User>{
         return api.logout()
     }
 
@@ -92,11 +92,11 @@ class WanJetpackRepository @Inject constructor(
         ).flow
     }
 
-    fun collect(id: Int): LiveData<ApiResponse<ApiArticle>> {
+    suspend fun collect(id: Int): ApiResponse<ApiArticle> {
         return api.collect(id)
     }
 
-    fun unCollect(id: Int): LiveData<ApiResponse<ApiArticle>> {
+    suspend fun unCollect(id: Int): ApiResponse<ApiArticle> {
         return api.unCollect(id)
     }
 

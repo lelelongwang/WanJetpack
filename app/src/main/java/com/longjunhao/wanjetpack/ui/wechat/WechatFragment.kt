@@ -33,7 +33,9 @@ class WechatFragment : Fragment() {
 
     private fun subscribeUi() {
         viewModel.wechatName.observe(viewLifecycleOwner, Observer {
-            initViewPager(it)
+            if (it.errorCode == 0) {
+                it.data?.let { list -> initViewPager(list) }
+            }
         })
     }
 

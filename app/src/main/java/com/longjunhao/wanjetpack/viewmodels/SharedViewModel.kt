@@ -1,9 +1,9 @@
 package com.longjunhao.wanjetpack.viewmodels
 
 //import com.longjunhao.wanjetpack.util.SharedPreferencesObject
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import com.longjunhao.wanjetpack.data.WanJetpackRepository
 import com.longjunhao.wanjetpack.data.user.User
@@ -67,18 +67,19 @@ class SharedViewModel @Inject constructor(
     /**
      * todo 为什么不行获取不到username、password的值呢？
      */
-    val login = repository.login(username.value ?: "", password.value ?: "").map {
+    /*val login = repository.login(username.value ?: "", password.value ?: "").map {
         if (it.errorCode == 0) it.data else null
+    }*/
+
+    fun login(username: String, password: String) = liveData {
+        emit(repository.login(username, password))
     }
 
-    fun login(username: String, password: String) = repository.login(username, password).map {
-        if (it.errorCode == 0) it.data else null
+    fun register(username: String, password: String, repassword: String) = liveData {
+        emit(repository.register(username, password, repassword))
     }
 
-    fun register(username: String, password: String, repassword: String) =
-        repository.register(username, password, repassword).map {
-            if (it.errorCode == 0) it.data else null
-        }
-
-    val logout = repository.logout()
+    val logout = liveData {
+        emit(repository.logout())
+    }
 }
