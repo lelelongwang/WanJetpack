@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -49,7 +50,7 @@ class WendaAdapter(
                             holder.binding.favorite.setImageResource(R.drawable.ic_favorite_border_24)
                             Snackbar.make(view, "取消收藏成功", Snackbar.LENGTH_LONG).show()
                         } else if (it.errorCode == -1001) {
-                            Snackbar.make(view, "请先登录账号，待实现", Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(view, "未知的场景，请提bug", Snackbar.LENGTH_LONG).show()
                         }
                     })
                 } else {
@@ -59,7 +60,7 @@ class WendaAdapter(
                             holder.binding.favorite.setImageResource(R.drawable.ic_favorite_24)
                             Snackbar.make(view, "收藏成功", Snackbar.LENGTH_LONG).show()
                         } else if (it.errorCode == -1001) {
-                            Snackbar.make(view, "请先登录账号，待实现", Snackbar.LENGTH_LONG).show()
+                            view.findNavController().navigate(R.id.loginFragment)
                         }
                     })
                 }

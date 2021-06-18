@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -51,8 +52,8 @@ class HomeArticleAdapter(
                             holder.binding.favorite.setImageResource(R.drawable.ic_favorite_border_24)
                             Snackbar.make(view, "取消收藏成功", Snackbar.LENGTH_LONG).show()
                         } else if (it.errorCode == -1001) {
-                            //todo 这是通过网络返回发现没有登录，是否需要多加个条件：新增Boolean类型的isLogin保存在SharedPreferences中呢？
-                            Snackbar.make(view, "请先登录账号，待实现", Snackbar.LENGTH_LONG).show()
+                            //没有登录的话，collect为false，故下面的代码应该不会执行。
+                            Snackbar.make(view, "未知的场景，请提bug", Snackbar.LENGTH_LONG).show()
                         }
                     })
                 } else {
@@ -62,7 +63,8 @@ class HomeArticleAdapter(
                             holder.binding.favorite.setImageResource(R.drawable.ic_favorite_24)
                             Snackbar.make(view, "收藏成功", Snackbar.LENGTH_LONG).show()
                         } else if (it.errorCode == -1001) {
-                            Snackbar.make(view, "请先登录账号，待实现", Snackbar.LENGTH_LONG).show()
+                            //todo 这是通过网络返回发现没有登录，是否需要多加个条件：新增Boolean类型的isLogin保存在SharedPreferences中呢? 登录动画需要优化
+                            view.findNavController().navigate(R.id.loginFragment)
                         }
                     })
                 }

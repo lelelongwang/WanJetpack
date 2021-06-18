@@ -59,6 +59,7 @@ WanJetpack
         - [条件导航](https://developer.android.google.cn/guide/navigation/navigation-conditional)
         - [Fragment 间用 activityViewModels() 共享数据](https://developer.android.google.cn/topic/libraries/architecture/viewmodel)
         - [在 NavGraph 中使用 ViewModel 共享数据](https://mp.weixin.qq.com/s/Hl8Yuf2bkDlVlgdB4M-wrw)
+    - [Safe Args 导航](https://developer.android.google.cn/guide/navigation/navigation-conditional)
 
 - [Preference]
     - [Jetpack Preference库](https://developer.android.google.cn/jetpack/androidx/releases/preference?hl=zh_cn)

@@ -47,8 +47,17 @@ class RegisterFragment : Fragment() {
                     viewModel.name.postValue(it.username)
                     viewModel.user.postValue(it)
                     viewModel.isLogin.postValue(true)
+                    //返回到上一个fragment，注意与popBackStack()的区别
                     //findNavController().navigateUp()
-                    findNavController().navigate(R.id.action_registerFragment_to_userFragment)
+
+                    //清空导航栈到指定的fragment，且在nav_gragh中设置popUpTo、popUpToInclusive
+                    //findNavController().navigate(R.id.action_registerFragment_to_userFragment)
+
+                    //popBackStack()是弹出当前fragment，而popBackStack(@IdRes int destinationId, boolean inclusive)是
+                    //可以清空当前fragment到destinationId之间的fragment。inclusive为true的话，destinationId也会弹出。
+                    //todo 界面退出动画需要优化
+                    findNavController().popBackStack(R.id.loginFragment,true)
+
                 } else {
                     viewModel.isLogin.postValue(false)
                     binding.repassword.error = getString(R.string.register_fail)

@@ -20,7 +20,6 @@ class WechatFragment : Fragment() {
 
     private val viewModel: WechatViewModel by viewModels()
     private lateinit var binding: FragmentWechatBinding
-    val wechatId = ArrayList<Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +40,7 @@ class WechatFragment : Fragment() {
     private fun initViewPager(chapters: List<WechatCategory>){
         if (chapters.isEmpty()) return
         val titles = arrayOfNulls<String>(chapters.size)
+        val wechatId = ArrayList<Int>()//解决crash：从本界面跳转到登录界面，返回到本界面时，wechatId.size和titles.size不一致的bug
         chapters.forEachIndexed { index, wechat ->
             titles[index] = wechat.name
             wechatId.add(wechat.id)
