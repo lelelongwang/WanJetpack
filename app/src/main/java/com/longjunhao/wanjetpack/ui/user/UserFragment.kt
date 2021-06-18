@@ -50,7 +50,7 @@ class UserFragment : Fragment() {
             Snackbar.make(it, "进入个人设置界面，待实现", Snackbar.LENGTH_LONG).show()
         }
         binding.logoutBtn.setOnClickListener {
-            viewModel.logout.observe(viewLifecycleOwner, Observer {
+            viewModel.logout().observe(viewLifecycleOwner, Observer {
                 if (it.errorCode == 0) {
                     viewModel.username.postValue("")
                     viewModel.password.postValue("")

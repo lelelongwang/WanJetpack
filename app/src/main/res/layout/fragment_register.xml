@@ -48,7 +48,6 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
             app:layout_constraintStart_toStartOf="@id/ic_welcome">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/username1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="用户名"
@@ -66,7 +65,6 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
             app:layout_constraintStart_toStartOf="@id/username">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="密码"
@@ -86,7 +84,6 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
             app:layout_constraintStart_toStartOf="@id/password">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/repassword1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="确认密码"

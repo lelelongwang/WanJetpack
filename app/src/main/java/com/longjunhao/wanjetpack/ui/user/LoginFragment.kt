@@ -43,13 +43,8 @@ class LoginFragment : Fragment() {
         }
 
         binding.setClickListener {
-            val username = binding.username1.text.toString()
-            val password = binding.password1.text.toString()
-            //viewModel.login.observe(viewLifecycleOwner, Observer {
-            //todo 此处传参数是个不好的方案，应该不需要传参数。
-            viewModel.login(username, password).observe(viewLifecycleOwner, Observer {
+            viewModel.login().observe(viewLifecycleOwner, Observer {
                 if (it.errorCode == 0) {
-                    viewModel.name.postValue(it.data?.username)
                     viewModel.user.postValue(it.data)
                     viewModel.isLogin.postValue(true)
                     findNavController().navigateUp()

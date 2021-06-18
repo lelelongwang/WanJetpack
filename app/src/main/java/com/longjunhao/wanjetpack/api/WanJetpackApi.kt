@@ -1,7 +1,6 @@
 package com.longjunhao.wanjetpack.api
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.data.ApiPage
 import com.longjunhao.wanjetpack.data.ApiResponse
@@ -173,9 +172,10 @@ class LocalCookie : CookieJar {
 
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         Log.d("LocalCookie", "saveFromResponse: ljh cookies=$cookies")
-        //如果注册新账号之后没有重新登录，则需要在注册时也要saveCookies
+        //如果注册新账号之后没有重新登录，则需要在注册时也要saveCookies。退出登录时，要通过saveCookies重置。
         val isSaveCookies = url.toString().startsWith("https://www.wanandroid.com/user/login?")
                 || url.toString().startsWith("https://www.wanandroid.com/user/register?")
+                || url.toString().startsWith("https://www.wanandroid.com/user/logout/json")
         if (isSaveCookies) {
             SharedPrefObject.saveCookies(cookies)
         }

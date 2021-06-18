@@ -1,6 +1,7 @@
 package com.longjunhao.wanjetpack.viewmodels
 
 //import com.longjunhao.wanjetpack.util.SharedPreferencesObject
+import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -58,28 +59,37 @@ class SharedViewModel @Inject constructor(
     }
 
     /**
-     * 用户名
+     * 显示的用户名
      */
-    val name: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
+    val name = user.map {
+        if (TextUtils.isEmpty(it.nickname)) it.username else it.nickname
     }
 
     /**
-     * todo 为什么不行获取不到username、password的值呢？
+     * 用了databinding双向绑定了，是不用传参的，直接从xml里获取即可。
+     *
+     * 注意 fun login() 和 val login 和 var login 的区别：
+     * 此处不能通过val login定义一个常量或者变量。要用fun login()方法，这样才能确保每次都有网络请求。
+     * 如果改为val login的话，在登录之后->退出登录->再次登录时不会网络请求，直接显示登陆成功，且会显示退出登录
+     * 之前的账号。因为在上面的退出登录后，val login并没有改变，所以再次登录时，由于是通过viewModel.login.observe
+     * 的方式，值没有变，故因为当点击登录按钮时，不会网络请求。如果该为fun login()的话，每次点击按钮都会执行，
+     * 然后会observe执行的结果。
      */
-    /*val login = repository.login(username.value ?: "", password.value ?: "").map {
-        if (it.errorCode == 0) it.data else null
-    }*/
-
-    fun login(username: String, password: String) = liveData {
-        emit(repository.login(username, password))
+    fun login() = liveData {
+        emit(repository.login(username.value ?: "", password.value ?: ""))
     }
 
-    fun register(username: String, password: String, repassword: String) = liveData {
-        emit(repository.register(username, password, repassword))
+    fun register() = liveData {
+        emit(
+            repository.register(
+                username.value ?: "",
+                password.value ?: "",
+                repassword.value ?: ""
+            )
+        )
     }
 
-    val logout = liveData {
+    fun logout() = liveData {
         emit(repository.logout())
     }
 }

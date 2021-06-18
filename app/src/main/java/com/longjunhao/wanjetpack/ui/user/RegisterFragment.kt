@@ -37,14 +37,8 @@ class RegisterFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.setClickListener {
-            val username = binding.username1.text.toString()
-            val password = binding.password1.text.toString()
-            val repassword = binding.repassword1.text.toString()
-            //viewModel.register.observe(viewLifecycleOwner, Observer {
-            //todo 此处传参数是个不好的方案，应该不需要传参数。
-            viewModel.register(username, password, repassword).observe(viewLifecycleOwner, Observer {
+            viewModel.register().observe(viewLifecycleOwner, Observer {
                 if (it.errorCode == 0) {
-                    viewModel.name.postValue(it.data?.username)
                     viewModel.user.postValue(it.data)
                     viewModel.isLogin.postValue(true)
                     //返回到上一个fragment，注意与popBackStack()的区别
