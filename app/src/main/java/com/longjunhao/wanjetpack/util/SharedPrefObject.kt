@@ -17,8 +17,7 @@ import java.lang.StringBuilder
 object SharedPrefObject {
 
     const val KEY_IS_LOGIN = "isLogin"
-    const val KEY_NICK_NAME = "nickName"
-    const val KEY_USER_NAME = "username"
+    const val KEY_LOGIN_NAME = "name"
 
     private fun getSharePref(): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(MainApplication.instance)
@@ -94,6 +93,5 @@ object SharedPrefObject {
         cookieManager.removeSessionCookies(null)
         cookieManager.removeAllCookies(null)
         cookieManager.flush()
-        //put(KEY_IS_LOGIN, false)
     }
 }

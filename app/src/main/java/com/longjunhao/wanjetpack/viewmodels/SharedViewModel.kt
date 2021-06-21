@@ -1,13 +1,9 @@
 package com.longjunhao.wanjetpack.viewmodels
 
-//import com.longjunhao.wanjetpack.util.SharedPreferencesObject
-import android.text.TextUtils
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.map
+import android.util.Log
+import androidx.lifecycle.*
 import com.longjunhao.wanjetpack.data.WanJetpackRepository
-import com.longjunhao.wanjetpack.data.user.User
+import com.longjunhao.wanjetpack.util.SharedPrefObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -52,17 +48,22 @@ class SharedViewModel @Inject constructor(
     }
 
     /**
-     * 用户信息
+     * 显示的用户名
+     * 登录状态本地化方案：
+     * 1.在登录、注册、退出成功后会修改isLogin的值，同时会保存 KEY_IS_LOGIN、KEY_LOGIN_NAME。
+     * 2.当isLogin状态发生变化时，会从KEY_LOGIN_NAME中获取name的值。这样当登录状态发生变化时，name能够正确显示
+     * 3.当kill进程后，首次进入UserFragment界面时，会通过调用init{}代码块，获取isLogin的状态。进而来更新name
      */
-    val user: MutableLiveData<User> by lazy {
-        MutableLiveData<User>()
+    val name = isLogin.map {
+        Log.d("SharedViewModel", "ljh : name, isLogin="+isLogin.value)
+        SharedPrefObject.getString(SharedPrefObject.KEY_LOGIN_NAME)
     }
 
-    /**
-     * 显示的用户名
-     */
-    val name = user.map {
-        if (TextUtils.isEmpty(it.nickname)) it.username else it.nickname
+    init {
+        Log.d("SharedViewModel init", "ljh : isLogin="+isLogin.value+"  name="+name.value)
+        if (isLogin.value == null) {
+            isLogin.postValue(SharedPrefObject.getBoolean(SharedPrefObject.KEY_IS_LOGIN))
+        }
     }
 
     /**

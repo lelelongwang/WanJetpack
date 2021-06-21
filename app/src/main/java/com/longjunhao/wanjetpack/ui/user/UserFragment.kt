@@ -52,10 +52,9 @@ class UserFragment : Fragment() {
         binding.logoutBtn.setOnClickListener {
             viewModel.logout().observe(viewLifecycleOwner, Observer {
                 if (it.errorCode == 0) {
-                    viewModel.username.postValue("")
-                    viewModel.password.postValue("")
                     viewModel.isLogin.postValue(false)
-                    //SharedPrefObject.logout()
+                    SharedPrefObject.put(SharedPrefObject.KEY_IS_LOGIN, false)
+                    SharedPrefObject.put(SharedPrefObject.KEY_LOGIN_NAME, "")
                 }
             })
         }
