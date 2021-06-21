@@ -1,12 +1,13 @@
 package com.longjunhao.wanjetpack.ui.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.longjunhao.wanjetpack.R
 import com.longjunhao.wanjetpack.adapter.HOME_ARTICLE_INDEX
@@ -14,7 +15,6 @@ import com.longjunhao.wanjetpack.adapter.HomeViewPagerAdapter
 import com.longjunhao.wanjetpack.adapter.VIEW_PAGER_INDEX_TWO
 import com.longjunhao.wanjetpack.databinding.FragmentHomeViewPagerBinding
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.IndexOutOfBoundsException
 
 @AndroidEntryPoint
 class HomeViewPagerFragment : Fragment() {
@@ -37,6 +37,10 @@ class HomeViewPagerFragment : Fragment() {
         }.attach()
 
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+
+        binding.search.setOnClickListener {
+            findNavController().navigate(R.id.action_homeViewPagerFragment_to_searchFragment)
+        }
 
         return binding.root
     }

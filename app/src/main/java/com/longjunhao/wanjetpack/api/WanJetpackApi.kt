@@ -134,6 +134,14 @@ interface WanJetpackApi {
         @Path("id") id: Int
     ): ApiResponse<ApiArticle>
 
+    /**
+     * 搜索
+     */
+    @POST("article/query/{page}/json")
+    suspend fun search(
+        @Path("page") page: Int,
+        @Query("k") keyword: String
+    ): WanJetResponse<ApiPage<ApiArticle>>
 
     companion object {
         private const val BASE_URL = "https://www.wanandroid.com/"

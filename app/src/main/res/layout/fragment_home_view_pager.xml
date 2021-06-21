@@ -48,13 +48,33 @@
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs"
-                style="@style/Widget.MaterialComponents.TabLayout.Colored"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:tabIconTint="@drawable/tab_icon_color_selector"
-                app:tabTextColor="?attr/colorPrimaryDark"/>
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabs"
+                    style="@style/Widget.MaterialComponents.TabLayout.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:tabIconTint="@drawable/tab_icon_color_selector"
+                    app:tabTextColor="?attr/colorPrimaryDark"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/search"/>
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/search"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="24dp"
+                    android:src="@drawable/ic_search"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tabs"
+                    app:layout_constraintBottom_toBottomOf="@id/tabs"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 

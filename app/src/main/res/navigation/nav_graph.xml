@@ -9,7 +9,11 @@
         android:id="@+id/homeViewPagerFragment"
         android:name="com.longjunhao.wanjetpack.ui.home.HomeViewPagerFragment"
         android:label="fragment_home_view_pager"
-        tools:layout="@layout/fragment_home_view_pager" />
+        tools:layout="@layout/fragment_home_view_pager" >
+        <action
+            android:id="@+id/action_homeViewPagerFragment_to_searchFragment"
+            app:destination="@id/searchFragment"/>
+    </fragment>
 
     <fragment
         android:id="@+id/projectFragment"
@@ -78,4 +82,9 @@
         android:name="com.longjunhao.wanjetpack.ui.user.CollectionFragment"
         android:label="fragment_collection"
         tools:layout="@layout/fragment_collection" />
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.longjunhao.wanjetpack.ui.home.SearchFragment"
+        android:label="SearchFragment" />
 </navigation>

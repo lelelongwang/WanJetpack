@@ -83,10 +83,13 @@ WanJetpack
 
 - [CoordinatorLayout、NestedScrollView、CollapsingToolbarLayout、AppBarLayout、MaterialToolbart]()
 
-- [search](https://developer.android.google.cn/guide/topics/search)
+- 待优化场景，搜索场景：[search](https://developer.android.google.cn/guide/topics/search)在 Android 系统的协助下使用**搜索对话框**或**搜索微件**传递搜索查询
+    - 搜索对话框
+    - 搜索微件
 
 - Glide
     - 和Coil对比，建议换成Coil加载图片
 
 - Cookie
+    - [CookieManager](https://developer.android.google.cn/reference/kotlin/android/webkit/CookieManager)
     - 本demo中，和收藏相关都需要登录操作，建议登录将返回的cookie（其中包含账号、密码）持久化到本地即可。
