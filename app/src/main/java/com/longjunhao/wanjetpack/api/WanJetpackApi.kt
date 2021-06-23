@@ -4,6 +4,7 @@ import android.util.Log
 import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.data.ApiPage
 import com.longjunhao.wanjetpack.data.ApiResponse
+import com.longjunhao.wanjetpack.data.home.ApiBanner
 import com.longjunhao.wanjetpack.data.project.ProjectCategory
 import com.longjunhao.wanjetpack.data.user.User
 import com.longjunhao.wanjetpack.data.wechat.WechatCategory
@@ -133,6 +134,12 @@ interface WanJetpackApi {
     suspend fun unCollect(
         @Path("id") id: Int
     ): ApiResponse<ApiArticle>
+
+    /**
+     * Banner
+     */
+    @GET("banner/json")
+    suspend fun getBanner(): ApiResponse<List<ApiBanner>>
 
     /**
      * 搜索

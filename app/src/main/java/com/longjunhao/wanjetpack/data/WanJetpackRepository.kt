@@ -5,6 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.longjunhao.wanjetpack.api.WanJetpackApi
+import com.longjunhao.wanjetpack.data.home.ApiBanner
 import com.longjunhao.wanjetpack.data.home.HomeArticlePagingSource
 import com.longjunhao.wanjetpack.data.home.SearchPagingSource
 import com.longjunhao.wanjetpack.data.home.WendaPagingSource
@@ -106,6 +107,10 @@ class WanJetpackRepository @Inject constructor(
             config = PagingConfig(enablePlaceholders = false, pageSize = SEARCH_ARTICLE_PAGE_SIZE),
             pagingSourceFactory = { SearchPagingSource(api, keyword) }
         ).flow
+    }
+
+    suspend fun getBanner(): ApiResponse<List<ApiBanner>> {
+        return api.getBanner()
     }
 
 }

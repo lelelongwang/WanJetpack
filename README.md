@@ -5,6 +5,8 @@ WanJetpack
 
 - [Sunflower](https://github.com/android/sunflower)
 
+### 相关知识点
+
 - [LiveData文档](https://developer.android.google.cn/topic/libraries/architecture/livedata)
     - [LiveDataSample](https://github.com/android/architecture-components-samples/tree/main/LiveDataSample):
     - 持有可被观察的类类似于**EventBus**或者**RxJava**。LiveData是一种可感知生命周期的组件
@@ -29,6 +31,14 @@ WanJetpack
 
 - [coroutines]()
     - [理解协程、LiveData 和 Flow](https://mp.weixin.qq.com/s/p5H51RC6QfyyoAcQ1aGRLg)
+        - liveData 协程构造方法提供了一个协程代码块，这个块就是 LiveData 的作用域，**当 LiveData 被观察的时候，里面的操作就会被执行，当 LiveData 不再被使用时，里面的操作就会取消。** 而且该协程构造方法产生的是一个不可变的LiveData，可以直接暴露给对应的视图使用。而 emit() 方法则用来更新 LiveData 的数据。
+        - 一个常见用例，比如当用户在 UI 中选中一些元素，然后将这些选中的内容显示出来。一个常见的做法是，把被选中的项目的 ID 保存在一个 MutableLiveData 里，然后运行 switchMap。现在在 switchMap 里，您也可以使用协程构造方法:
+        ```kotlin
+            private val itemId = MutableLiveData<String>()
+            val result = itemId.switchMap {
+                liveData { emit(fetchItem(it)) }
+            }
+        ```
     - [Google 推荐在 MVVM 架构中使用 Kotlin Flow](https://juejin.cn/post/6854573211930066951)
     - [图解协程原理](https://juejin.cn/post/6883652600462327821)
 
@@ -61,22 +71,63 @@ WanJetpack
         - [在 NavGraph 中使用 ViewModel 共享数据](https://mp.weixin.qq.com/s/Hl8Yuf2bkDlVlgdB4M-wrw)
     - [Safe Args 导航](https://developer.android.google.cn/guide/navigation/navigation-conditional)
 
-- [Preference]
-    - [Jetpack Preference库](https://developer.android.google.cn/jetpack/androidx/releases/preference?hl=zh_cn)
-    - [Preference指南](https://developer.android.google.cn/guide/topics/ui/settings?hl=zh_cn)
-    - 参考官方demo：[PreferencesKotlin](https://github.com/android/user-interface-samples/tree/master/PreferencesKotlin)
+- [Preference 库](https://developer.android.google.cn/jetpack/androidx/releases/preference?hl=zh_cn)
+    - [官方指南](https://developer.android.google.cn/guide/topics/ui/settings?hl=zh_cn)
+    - 官方demo：[PreferencesKotlin](https://github.com/android/user-interface-samples/tree/master/PreferencesKotlin)
 
-- [ViewPager2](https://github.com/android/views-widgets-samples/tree/main/ViewPager2)
+- [RecyclerView 库](https://developer.android.google.cn/jetpack/androidx/releases/recyclerview?hl=zh_cn)
+    - [官方文档](https://developer.android.google.cn/guide/topics/ui/layout/recyclerview?hl=zh_cn)
+    - [官方demo](https://github.com/android/views-widgets-samples/tree/main/RecyclerView)
+        - RecyclerView： java版本普通demo
+        - RecyclerViewAnimations： 新增、删除、更新 item的demo
+        - RecyclerViewKotlin： ConcatAdapter的demo
+            - 实现了ConcatAdapter，**能规避嵌套滑动**
+            - 实现了点击item的方案，WanJetpack建议参考
+            - 实现了新增、删除item的方案及更新item动画
+        - RecyclerViewSimple： kotlin版本普通demo
+    - 默认的adapter：**RecyclerView.Adapter**：[认识 RecyclerView](https://zhuanlan.zhihu.com/p/363343211)
+    - **ListAdapter**：继承RecyclerView.Adapter：[在 RecyclerView 中使用 ListAdapter](https://www.jianshu.com/p/16b364e20ee7)
+    - **ConcatAdapter**：https://mp.weixin.qq.com/s/QTaz45aLucX9mivVMbCZPQ
+    - **PagingDataAdapter**：继承RecyclerView.Adapter
+
+- [ViewPager2 库](https://developer.android.google.cn/jetpack/androidx/releases/viewpager2)
+    - [官方文档](https://developer.android.google.cn/guide/navigation/navigation-swipe-view-2)
+    - [官方demo](https://github.com/android/views-widgets-samples/tree/main/ViewPager2)
+        - 官方demo中的ViewPager2 with a Preview of Next/Prev Page 相当于Banner中类似的场景
+        - 官方demo中的ViewPager2 with a Nested RecyclerViews 场景很好，**提供了解决嵌套滑动的方案**
+    - ViewPager2 **底层使用 RecycleView 实现的**，所以这里不再使用 PagerAdapter 而是使用了 **RecyclerView.Adapter**
+    - 对应的fragment用的是 **FragmentStateAdapter**，而不是 FragmentStatePagerAdapter、FragmentPagerAdapter之类的
+
+
+- Banner：其实就是 ViewPager 的应用
+    - 三方库：
+        - [banner](https://github.com/youth5201314/banner)
+        - [开发一款商业级Banner控件](https://mp.weixin.qq.com/s/X615qrAXzVXVlsYtmXTj1w)
+        - [打造一个灵活易用的Banner组件](https://mp.weixin.qq.com/s/b2_NB8ue0gvKZ2lvHITbNA)
+        - [ViewPager2：打造Banner控件](https://juejin.cn/post/6844904066011643911)
+    - 自己实现方案：
+        - 让Banner和RecyclerView分开： 通过NestedScrollView里包裹ViewPager2和RecyclerView的话，会有滑动卡顿的问题，即使加上android:nestedScrollingEnabled="false"属性，除非再加上setHasFixedSize(true)，但是还会有其他的问题：加上setHasFixedSize(true)后，界面的数据只显示一页了。故此方案暂时行不通了。本方案相关代码
+            ```kotlin
+                binding.articleList.setHasFixedSize(true)
+                binding.articleList.isNestedScrollingEnabled = false
+            ```
+        - 让Banner成为RecyclerView的一部分：
+            - 如果Banner在顶部：banner在顶部的话，就做header
+            - 如果Banner在中间：在中间的话，就type，或者对adapter做一个扩展，做一个可以在中间插入的类似header。毕竟type的话，写起来也蛮麻烦的
+        - 通过 ConcatAdapter 实现：
+        - 通过 MultiTypeAdapter 实现：
+- NestedScrollView
+    - 直接在 NestedScrollView 中放入 ViewPager2 和 RecyclerView 时，会出现滑动卡顿。[解决方案参考](https://www.jianshu.com/p/8dd1e902b7cd)
+    - [NestedScrollView](https://www.jianshu.com/p/f55abc60a879)
+    - 事件冲突的原因：Android 的事件分发机制中，只要有一个控件消费了事件，其他控件就没办法再接收到这个事件了。因此，当有嵌套滑动场景时，我们都需要自己手动解决事件冲突。而在 Android 5.0 Lollipop 之后，Google 官方通过 嵌套滑动机制 解决了传统 Android 事件分发无法共享事件这个问题。
+    - 嵌套滑动机制：嵌套滑动机制 的基本原理可以认为是事件共享，即当子控件接收到滑动事件，准备要滑动时，会先通知父控件(startNestedScroll）；然后在滑动之前，会先询问父控件是否要滑动（dispatchNestedPreScroll)；如果父控件响应该事件进行了滑动，那么就会通知子控件它具体消耗了多少滑动距离；然后交由子控件处理剩余的滑动距离；最后子控件滑动结束后，如果滑动距离还有剩余，就会再问一下父控件是否需要在继续滑动剩下的距离（dispatchNestedScroll)...
+
 
 - [TabLayout]()
+    - 和ViewPager2、Fragment应用
 
 - [BottomNavigationView]()
-
-- [RecyclerView]()
-    - 默认的adapter：RecyclerView.Adapter：[认识 RecyclerView](https://zhuanlan.zhihu.com/p/363343211)
-    - **ListAdapter**：继承RecyclerView.Adapter：[在 RecyclerView 中使用 ListAdapter](https://www.jianshu.com/p/16b364e20ee7)
-    - ConcatAdapter：https://mp.weixin.qq.com/s/QTaz45aLucX9mivVMbCZPQ
-    - PagingDataAdapter：继承RecyclerView.Adapter
+    - 和Navigation、Fragment、ViewPager2应用
 
 - [Constraint Layout]()
     [Constraint Layout 2.0 用法详解](https://mp.weixin.qq.com/s/7wEr6okR-CAAoNDYB4gHig)
