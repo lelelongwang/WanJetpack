@@ -1,13 +1,12 @@
 package com.longjunhao.wanjetpack.viewmodels
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.data.WanJetpackRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -43,6 +42,18 @@ class HomeArticleViewModel @Inject constructor(
      */
     val bannerList = liveData {
         emit(repository.getBanner())
+    }
+
+    /**
+     * 通过autoScrollBannerPage.observe()触发没三秒滚动一下banner
+     */
+    val autoScrollBannerPage = liveData {
+        var counter = 0
+        while (true) {
+            delay(3000)
+            counter++
+            emit(counter)
+        }
     }
 
     /**

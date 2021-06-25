@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.text.TextUtils" alias="textUtlis" />
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener"/>
+        <variable
+            name="banner"
+            type="com.longjunhao.wanjetpack.data.home.ApiBanner" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/banner_image"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:imageFromUrl="@{banner.imagePath}"
+            app:shapeAppearanceOverlay="@style/roundedCornerImageStyle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/banner_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="@{banner.title}"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:gravity="start"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="?attr/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/banner_image"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
