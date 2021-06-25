@@ -115,7 +115,11 @@ WanJetpack
             - 如果Banner在顶部：banner在顶部的话，就做header
             - 如果Banner在中间：在中间的话，就type，或者对adapter做一个扩展，做一个可以在中间插入的类似header。毕竟type的话，写起来也蛮麻烦的
         - 通过 ConcatAdapter 实现：
-        - 通过 MultiTypeAdapter 实现：
+            - 本demo就是用的该方案，demo中通过HomeFirstAdapter添加RecyclerView的ConcatAdapter中，通过HomeBannerAdapter实现ViewPager2的adapter。
+            - 通过上述的方式加上ViewPager2之后，ViewPager2没有影响RecyclerView的功能，RecyclerView上下滑动流畅；但是ViewPager2不能滑动，因为事件被RecyclerView拦截了。故需新增自定义布局 NestedFrameLayout 嵌套在ViewPager2之上，在 NestedFrameLayout 去处理父类的事件分发，即当左右滑动 NestedFrameLayout 时，执行 NestedFrameLayout 的parent.requestDisallowInterceptTouchEvent(true)方法，让ViewPager2消费事件。
+        - 通过 MultiTypeAdapter 实现：暂时没有验证
+        - **工行融e购**实现方案：首页除了viewpager功能都放在AppBarLayout里面，但是这样TabLayout可能就要和融e购一样放在下面了，不是想要的。用ConcatAdapter也可以实现工行融e购的首页效果。
+        - **京东首页**实现方案：自定义控件实现。用ConcatAdapter也能实现京东首页效果
 - NestedScrollView
     - 直接在 NestedScrollView 中放入 ViewPager2 和 RecyclerView 时，会出现滑动卡顿。[解决方案参考](https://www.jianshu.com/p/8dd1e902b7cd)
     - [NestedScrollView](https://www.jianshu.com/p/f55abc60a879)

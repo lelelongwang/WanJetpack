@@ -1,9 +1,6 @@
 package com.longjunhao.wanjetpack.viewmodels
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.longjunhao.wanjetpack.data.ApiArticle
@@ -35,6 +32,9 @@ class ProjectViewModel @Inject constructor(
         emit(repository.getProjectCategory())
     }
 
+    /**
+     * todo 期望用 currentSelectedItem.switchMap{}结合liveData{}或者flow{}实现
+     */
     fun getProjectArticle(categoryId: Int): Flow<PagingData<ApiArticle>> {
         currentQueryValue = categoryId
         val newResult: Flow<PagingData<ApiArticle>> =

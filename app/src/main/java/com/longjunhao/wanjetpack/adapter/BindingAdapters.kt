@@ -16,7 +16,10 @@
 
 package com.longjunhao.wanjetpack.adapter
 
+import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -39,4 +42,20 @@ fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(view)
     }
+}
+
+/**
+ * todo 点击搜索时，也期望通过BindingAdapter实现，有flow，暂时没有实现。和“项目”里的点击项目分类里的原因类似，都是有
+ *   flow，由于有flow导致在点击项目分类时，用协程构造器失败。
+ */
+@BindingAdapter(value = ["searchAction"])
+fun bindSearch(editText: EditText, callback: () -> Unit) {
+    editText.setOnEditorActionListener { _, actionId, _ ->
+        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            Log.d("bindingAdapters", "bindSearch: ")
+            callback()
+        }
+        true
+    }
+
 }
