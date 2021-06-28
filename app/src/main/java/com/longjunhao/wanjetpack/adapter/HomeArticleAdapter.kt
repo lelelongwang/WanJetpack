@@ -1,9 +1,8 @@
 package com.longjunhao.wanjetpack.adapter
 
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
@@ -78,9 +77,8 @@ class HomeArticleAdapter(
         init {
             binding.setClickListener {
                 binding.article?.let { homeArticle ->
-                    val uri = Uri.parse(homeArticle.link)
-                    val intent = Intent(Intent.ACTION_VIEW, uri)
-                    it.context.startActivity(intent)
+                    val bundle = bundleOf("link" to homeArticle.link, "title" to homeArticle.title)
+                    it.findNavController().navigate(R.id.webFragment, bundle)
                 }
             }
         }

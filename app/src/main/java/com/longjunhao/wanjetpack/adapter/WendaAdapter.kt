@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
@@ -74,9 +75,8 @@ class WendaAdapter(
         init {
             binding.setClickListener {
                 binding.wenda?.let { wenda ->
-                    val uri = Uri.parse(wenda.link)
-                    val intent = Intent(Intent.ACTION_VIEW, uri)
-                    it.context.startActivity(intent)
+                    val bundle = bundleOf("link" to wenda.link, "title" to wenda.title)
+                    it.findNavController().navigate(R.id.webFragment, bundle)
                 }
             }
         }

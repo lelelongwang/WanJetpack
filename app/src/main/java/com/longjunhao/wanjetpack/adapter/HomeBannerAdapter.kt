@@ -4,7 +4,10 @@ import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.longjunhao.wanjetpack.R
 import com.longjunhao.wanjetpack.data.home.ApiBanner
 import com.longjunhao.wanjetpack.databinding.ListItemBannerBinding
 
@@ -52,9 +55,8 @@ class BannerViewHolder(
     init {
         binding.bannerImage.setOnClickListener {
             binding.banner?.let { bannerItem ->
-                val uri = Uri.parse(bannerItem.url)
-                val intent = Intent(Intent.ACTION_VIEW, uri)
-                it.context.startActivity(intent)
+                val bundle = bundleOf("link" to bannerItem.url, "title" to bannerItem.title)
+                it.findNavController().navigate(R.id.webFragment, bundle)
             }
         }
     }

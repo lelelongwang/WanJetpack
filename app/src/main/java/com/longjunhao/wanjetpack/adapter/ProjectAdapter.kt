@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
@@ -74,9 +75,8 @@ class ProjectAdapter(
         init {
             binding.setClickListener {
                 binding.project?.let { projectArticle ->
-                    val uri = Uri.parse(projectArticle.link)
-                    val intent = Intent(Intent.ACTION_VIEW, uri)
-                    it.context.startActivity(intent)
+                    val bundle = bundleOf("link" to projectArticle.link, "title" to projectArticle.title)
+                    it.findNavController().navigate(R.id.webFragment, bundle)
                 }
             }
         }

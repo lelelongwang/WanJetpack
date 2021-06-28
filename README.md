@@ -4,6 +4,11 @@ WanJetpack
 ### 参考demo
 
 - [Sunflower](https://github.com/android/sunflower)
+- [architecture-components-samples](https://github.com/android/architecture-components-samples)
+- [views-widgets-samples](https://github.com/android/views-widgets-samples)
+- [user-interface-samples](https://github.com/android/user-interface-samples)
+- [architecture-samples](https://github.com/android/architecture-samples)
+- [compose-samples](https://github.com/android/compose-samples)
 
 ### 相关知识点
 
@@ -69,7 +74,7 @@ WanJetpack
         - [条件导航](https://developer.android.google.cn/guide/navigation/navigation-conditional)
         - [Fragment 间用 activityViewModels() 共享数据](https://developer.android.google.cn/topic/libraries/architecture/viewmodel)
         - [在 NavGraph 中使用 ViewModel 共享数据](https://mp.weixin.qq.com/s/Hl8Yuf2bkDlVlgdB4M-wrw)
-    - [Safe Args 导航](https://developer.android.google.cn/guide/navigation/navigation-conditional)
+    - [Safe Args 导航](https://developer.android.google.cn/guide/navigation/navigation-pass-data)
 
 - [Preference 库](https://developer.android.google.cn/jetpack/androidx/releases/preference?hl=zh_cn)
     - [官方指南](https://developer.android.google.cn/guide/topics/ui/settings?hl=zh_cn)
@@ -148,3 +153,8 @@ WanJetpack
 - Cookie
     - [CookieManager](https://developer.android.google.cn/reference/kotlin/android/webkit/CookieManager)
     - 本demo中，和收藏相关都需要登录操作，建议登录将返回的cookie（其中包含账号、密码）持久化到本地即可。
+
+- [Webview 库](https://developer.android.google.cn/jetpack/androidx/releases/webkit)
+    - [官方文档](https://developer.android.google.cn/guide/webapps/webview)
+    - [官方demo](https://github.com/android/views-widgets-samples/tree/main/WebView)
+    - 本demo中跳转到WebFragment是通过 Bundle 传递参数，**没有**用通过 Navigation 的 Safe Args 导航实现

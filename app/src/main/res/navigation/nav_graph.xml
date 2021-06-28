@@ -87,4 +87,10 @@
         android:id="@+id/searchFragment"
         android:name="com.longjunhao.wanjetpack.ui.home.SearchFragment"
         android:label="SearchFragment" />
+
+    <fragment
+        android:id="@+id/webFragment"
+        android:name="com.longjunhao.wanjetpack.ui.web.WebFragment"
+        android:label="fragment_web"
+        tools:layout="@layout/fragment_web" />
 </navigation>
