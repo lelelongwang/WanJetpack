@@ -52,15 +52,6 @@ class BannerViewHolder(
     val binding: ListItemBannerBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    init {
-        binding.bannerImage.setOnClickListener {
-            binding.banner?.let { bannerItem ->
-                val bundle = bundleOf("link" to bannerItem.url, "title" to bannerItem.title)
-                it.findNavController().navigate(R.id.webFragment, bundle)
-            }
-        }
-    }
-
     fun bind(item: ApiBanner) {
         binding.banner = item
         binding.executePendingBindings()

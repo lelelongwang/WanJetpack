@@ -5,9 +5,6 @@
     <data>
         <import type="android.text.TextUtils" alias="textUtlis" />
         <variable
-            name="clickListener"
-            type="android.view.View.OnClickListener"/>
-        <variable
             name="banner"
             type="com.longjunhao.wanjetpack.data.home.ApiBanner" />
 
@@ -23,6 +20,7 @@
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             app:imageFromUrl="@{banner.imagePath}"
+            app:webViewFromArticle="@{banner}"
             app:shapeAppearanceOverlay="@style/roundedCornerImageStyle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

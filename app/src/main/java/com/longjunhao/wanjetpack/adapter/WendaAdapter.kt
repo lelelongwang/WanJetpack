@@ -72,14 +72,6 @@ class WendaAdapter(
     class WendaViewHolder(
         val binding: ListItemWendaBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.setClickListener {
-                binding.wenda?.let { wenda ->
-                    val bundle = bundleOf("link" to wenda.link, "title" to wenda.title)
-                    it.findNavController().navigate(R.id.webFragment, bundle)
-                }
-            }
-        }
 
         fun bind(item: ApiArticle) {
             binding.apply {

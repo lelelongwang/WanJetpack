@@ -42,14 +42,6 @@ class CollectionArticleAdapter : PagingDataAdapter<ApiArticle, ApiArticleViewHol
     class ApiArticleViewHolder(
         private val binding: ListItemCollectionBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.setClickListener {
-                binding.article?.let { homeArticle ->
-                    val bundle = bundleOf("link" to homeArticle.link, "title" to homeArticle.title)
-                    it.findNavController().navigate(R.id.webFragment, bundle)
-                }
-            }
-        }
 
         fun bind(item: ApiArticle) {
             binding.apply {

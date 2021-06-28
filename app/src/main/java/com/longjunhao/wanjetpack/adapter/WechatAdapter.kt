@@ -72,14 +72,6 @@ class WechatAdapter(
     class WechatViewHolder(
         val binding: ListItemWechatBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.setClickListener {
-                binding.wechat?.let { wechat ->
-                    val bundle = bundleOf("link" to wechat.link, "title" to wechat.title)
-                    it.findNavController().navigate(R.id.webFragment, bundle)
-                }
-            }
-        }
 
         fun bind(item: ApiArticle) {
             binding.apply {

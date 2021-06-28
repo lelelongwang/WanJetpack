@@ -158,3 +158,4 @@ WanJetpack
     - [官方文档](https://developer.android.google.cn/guide/webapps/webview)
     - [官方demo](https://github.com/android/views-widgets-samples/tree/main/WebView)
     - 本demo中跳转到WebFragment是通过 Bundle 传递参数，**没有**用通过 Navigation 的 Safe Args 导航实现
+    - 本demo中的WebView适配了深色主题。

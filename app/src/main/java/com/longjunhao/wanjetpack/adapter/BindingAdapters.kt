@@ -21,9 +21,15 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.core.os.bundleOf
 import androidx.databinding.BindingAdapter
+import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.snackbar.Snackbar
+import com.longjunhao.wanjetpack.R
+import com.longjunhao.wanjetpack.data.ApiArticle
+import com.longjunhao.wanjetpack.data.home.ApiBanner
 
 @BindingAdapter("isGone")
 fun bindIsGone(view: View, isGone: Boolean) {
@@ -41,6 +47,27 @@ fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
             .load(imageUrl)
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(view)
+    }
+}
+
+@BindingAdapter("webViewFromArticle")
+fun bindWebViewFromArticle(view: View, article: Any) {
+    view.setOnClickListener {
+        when (article) {
+            is ApiArticle -> {
+                article.let {
+                    val bundle = bundleOf("link" to it.link, "title" to it.title)
+                    view.findNavController().navigate(R.id.webFragment, bundle)
+                }
+            }
+            is ApiBanner -> {
+                article.let {
+                    val bundle = bundleOf("link" to article.url, "title" to article.title)
+                    view.findNavController().navigate(R.id.webFragment, bundle)
+                }
+            }
+            else -> Snackbar.make(view, "未知的数据类型...", Snackbar.LENGTH_LONG).show()
+        }
     }
 }
 

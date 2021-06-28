@@ -72,14 +72,6 @@ class ProjectAdapter(
     class ProjectViewHolder(
         val binding: ListItemProjectBinding
     ): RecyclerView.ViewHolder(binding.root){
-        init {
-            binding.setClickListener {
-                binding.project?.let { projectArticle ->
-                    val bundle = bundleOf("link" to projectArticle.link, "title" to projectArticle.title)
-                    it.findNavController().navigate(R.id.webFragment, bundle)
-                }
-            }
-        }
 
         fun bind(item: ApiArticle) {
             binding.apply {

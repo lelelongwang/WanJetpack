@@ -15,7 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.longjunhao.wanjetpack.R
 import com.longjunhao.wanjetpack.adapter.SearchAdapter.ArticleViewHolder
 import com.longjunhao.wanjetpack.data.ApiArticle
-import com.longjunhao.wanjetpack.databinding.ListItemArticleBinding
+import com.longjunhao.wanjetpack.databinding.ListItemSearchBinding
 import com.longjunhao.wanjetpack.viewmodels.SearchViewModel
 
 /**
@@ -31,7 +31,7 @@ class SearchAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         return ArticleViewHolder(
-            ListItemArticleBinding.inflate(
+            ListItemSearchBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -71,16 +71,8 @@ class SearchAdapter(
     }
 
     class ArticleViewHolder(
-        val binding: ListItemArticleBinding
+        val binding: ListItemSearchBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.setClickListener {
-                binding.article?.let { homeArticle ->
-                    val bundle = bundleOf("link" to homeArticle.link, "title" to homeArticle.title)
-                    it.findNavController().navigate(R.id.webFragment, bundle)
-                }
-            }
-        }
 
         fun bind(item: ApiArticle) {
             binding.apply {
