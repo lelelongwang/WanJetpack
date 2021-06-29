@@ -1,22 +1,13 @@
 package com.longjunhao.wanjetpack.adapter
 
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import com.longjunhao.wanjetpack.R
 import com.longjunhao.wanjetpack.adapter.WendaAdapter.WendaViewHolder
 import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.databinding.ListItemWendaBinding
-import com.longjunhao.wanjetpack.viewmodels.WendaViewModel
 
 /**
  * .WendaAdapter
@@ -25,8 +16,7 @@ import com.longjunhao.wanjetpack.viewmodels.WendaViewModel
  * @date 2021/05/25
  */
 class WendaAdapter(
-    private val viewModel: WendaViewModel,
-    private val viewLifecycleOwner: LifecycleOwner
+    private val favoriteOnClick: (ApiArticle) -> Unit
 ) : PagingDataAdapter<ApiArticle, WendaViewHolder>(WendaDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WendaViewHolder {
@@ -35,7 +25,8 @@ class WendaAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ),
+            favoriteOnClick
         )
     }
 
@@ -43,35 +34,21 @@ class WendaAdapter(
         val wenda = getItem(position)
         if (wenda != null) {
             holder.bind(wenda)
-            holder.binding.favorite.setOnClickListener { view ->
-                if (wenda.collect) {
-                    viewModel.unCollect(wenda.id).observe(viewLifecycleOwner, Observer {
-                        if (it.errorCode == 0) {
-                            wenda.collect = false
-                            holder.binding.favorite.setImageResource(R.drawable.ic_favorite_border_24)
-                            Snackbar.make(view, "取消收藏成功", Snackbar.LENGTH_LONG).show()
-                        } else if (it.errorCode == -1001) {
-                            Snackbar.make(view, "未知的场景，请提bug", Snackbar.LENGTH_LONG).show()
-                        }
-                    })
-                } else {
-                    viewModel.collect(wenda.id).observe(viewLifecycleOwner, Observer {
-                        if (it.errorCode == 0) {
-                            wenda.collect = true
-                            holder.binding.favorite.setImageResource(R.drawable.ic_favorite_24)
-                            Snackbar.make(view, "收藏成功", Snackbar.LENGTH_LONG).show()
-                        } else if (it.errorCode == -1001) {
-                            view.findNavController().navigate(R.id.loginFragment)
-                        }
-                    })
-                }
-            }
         }
     }
 
     class WendaViewHolder(
-        val binding: ListItemWendaBinding
+        val binding: ListItemWendaBinding,
+        val favoriteOnClick: (ApiArticle) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.favorite.setOnClickListener {
+                binding.wenda?.let {
+                    favoriteOnClick(it)
+                }
+            }
+        }
 
         fun bind(item: ApiArticle) {
             binding.apply {

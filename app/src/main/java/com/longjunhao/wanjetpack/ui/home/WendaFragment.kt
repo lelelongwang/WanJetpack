@@ -6,9 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import com.longjunhao.wanjetpack.adapter.HomeArticleAdapter
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
+import com.longjunhao.wanjetpack.R
 import com.longjunhao.wanjetpack.adapter.WendaAdapter
+import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.databinding.FragmentWendaBinding
 import com.longjunhao.wanjetpack.viewmodels.WendaViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,28 +25,55 @@ class WendaFragment : Fragment() {
 
     private var homeJob: Job? = null
     private val viewModel: WendaViewModel by viewModels()
+    private lateinit var binding: FragmentWendaBinding
+    private lateinit var articleAdapter: WendaAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentWendaBinding.inflate(inflater,container,false)
+        binding = FragmentWendaBinding.inflate(inflater,container,false)
         context ?: return binding.root
 
-        val adapter = WendaAdapter(viewModel, viewLifecycleOwner)
-        binding.articleList.adapter = adapter
-        subscribeUi(adapter)
+        articleAdapter = WendaAdapter { apiArticle -> adapterFavoriteOnClick(apiArticle) }
+        binding.articleList.adapter = articleAdapter
+        subscribeUi()
 
         return binding.root
     }
 
-    private fun subscribeUi(adapter: WendaAdapter) {
+    private fun subscribeUi() {
         homeJob?.cancel()
         homeJob = lifecycleScope.launch(){
             viewModel.getWenda().collectLatest {
-                adapter.submitData(it)
+                articleAdapter.submitData(it)
             }
+        }
+    }
+
+    private fun adapterFavoriteOnClick (article: ApiArticle) {
+        if (article.collect) {
+            viewModel.unCollect(article.id).observe(viewLifecycleOwner, Observer {
+                if (it.errorCode == 0) {
+                    article.collect = false
+                    articleAdapter.notifyDataSetChanged()
+                    Snackbar.make(binding.root, "取消收藏成功", Snackbar.LENGTH_LONG).show()
+                } else if (it.errorCode == -1001) {
+                    //没有登录的话，collect为false，故下面的代码应该不会执行。
+                    Snackbar.make(binding.root, "未知的场景，请提bug", Snackbar.LENGTH_LONG).show()
+                }
+            })
+        } else {
+            viewModel.collect(article.id).observe(viewLifecycleOwner, Observer {
+                if (it.errorCode == 0) {
+                    article.collect = true
+                    articleAdapter.notifyDataSetChanged()
+                    Snackbar.make(binding.root, "收藏成功", Snackbar.LENGTH_LONG).show()
+                } else if (it.errorCode == -1001) {
+                    findNavController().navigate(R.id.loginFragment)
+                }
+            })
         }
     }
 }

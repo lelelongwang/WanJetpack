@@ -145,6 +145,7 @@ class HomeFirstAdapter: RecyclerView.Adapter<HomeFirstAdapter.FirstViewHolder>()
         }
 
         private fun initIndicator(list: List<ApiBanner>){
+            binding.indicatorLayout.removeAllViews()
             for (index in 1..list.size-2) {
                 val imageView = ImageView(binding.root.context)
                 val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT)

@@ -1,7 +1,6 @@
 package com.longjunhao.wanjetpack.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
+import com.longjunhao.wanjetpack.R
 import com.longjunhao.wanjetpack.adapter.SearchAdapter
+import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.databinding.FragmentSearchBinding
 import com.longjunhao.wanjetpack.viewmodels.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,19 +26,21 @@ class SearchFragment : Fragment() {
 
     private var homeJob: Job? = null
     private val viewModel: SearchViewModel by viewModels()
+    private lateinit var binding: FragmentSearchBinding
+    private lateinit var articleAdapter: SearchAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentSearchBinding.inflate(inflater,container,false)
+        binding = FragmentSearchBinding.inflate(inflater,container,false)
         context ?: return binding.root
 
         //databinding 双向绑定时要加上这行，否则获取 keyword 值为 null
         binding.searchModel = viewModel
 
-        val adapter = SearchAdapter(viewModel, viewLifecycleOwner)
-        binding.articleList.adapter = adapter
+        articleAdapter = SearchAdapter { apiArticle -> adapterFavoriteOnClick(apiArticle) }
+        binding.articleList.adapter = articleAdapter
 
         binding.searchCancel.setOnClickListener {
             findNavController().navigateUp()
@@ -44,7 +48,7 @@ class SearchFragment : Fragment() {
 
         binding.search.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                subscribeUi(adapter)
+                subscribeUi()
             }
             true
         }
@@ -60,12 +64,37 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
-    private fun subscribeUi(adapter: SearchAdapter){
+    private fun subscribeUi(){
         homeJob?.cancel()
         homeJob = lifecycleScope.launch {
             viewModel.getSearchArticle().collectLatest {
-                adapter.submitData(it)
+                articleAdapter.submitData(it)
             }
+        }
+    }
+
+    private fun adapterFavoriteOnClick (article: ApiArticle) {
+        if (article.collect) {
+            viewModel.unCollect(article.id).observe(viewLifecycleOwner, Observer {
+                if (it.errorCode == 0) {
+                    article.collect = false
+                    articleAdapter.notifyDataSetChanged()
+                    Snackbar.make(binding.root, "取消收藏成功", Snackbar.LENGTH_LONG).show()
+                } else if (it.errorCode == -1001) {
+                    //没有登录的话，collect为false，故下面的代码应该不会执行。
+                    Snackbar.make(binding.root, "未知的场景，请提bug", Snackbar.LENGTH_LONG).show()
+                }
+            })
+        } else {
+            viewModel.collect(article.id).observe(viewLifecycleOwner, Observer {
+                if (it.errorCode == 0) {
+                    article.collect = true
+                    articleAdapter.notifyDataSetChanged()
+                    Snackbar.make(binding.root, "收藏成功", Snackbar.LENGTH_LONG).show()
+                } else if (it.errorCode == -1001) {
+                    findNavController().navigate(R.id.loginFragment)
+                }
+            })
         }
     }
 

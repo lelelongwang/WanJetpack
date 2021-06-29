@@ -1,14 +1,18 @@
 package com.longjunhao.wanjetpack.ui.wechat
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
+import com.longjunhao.wanjetpack.R
 import com.longjunhao.wanjetpack.adapter.WechatAdapter
+import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.databinding.FragmentWechatArticleBinding
 import com.longjunhao.wanjetpack.viewmodels.WechatArticleViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +28,8 @@ class WechatArticleFragment : Fragment() {
     private var wechatId: Int? = null
     private var homeJob: Job? = null
     private val viewModel: WechatArticleViewModel by viewModels()
+    private lateinit var binding: FragmentWechatArticleBinding
+    private lateinit var adapter: WechatAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,15 +42,15 @@ class WechatArticleFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentWechatArticleBinding.inflate(inflater,container,false)
-        val adapter = WechatAdapter(viewModel, viewLifecycleOwner)
+        binding = FragmentWechatArticleBinding.inflate(inflater,container,false)
+        adapter = WechatAdapter { apiArticle -> adapterFavoriteOnClick(apiArticle) }
         binding.articleList.adapter = adapter
-        subscribeUi(adapter)
+        subscribeUi()
 
         return binding.root
     }
 
-    private fun subscribeUi(adapter: WechatAdapter) {
+    private fun subscribeUi() {
         homeJob?.cancel()
         homeJob = lifecycleScope.launch(){
             wechatId?.let { wechatId ->
@@ -62,6 +68,31 @@ class WechatArticleFragment : Fragment() {
                     putInt(WECHAT_TAB_ID, id)
                 }
             }
+    }
+
+    private fun adapterFavoriteOnClick (article: ApiArticle) {
+        if (article.collect) {
+            viewModel.unCollect(article.id).observe(viewLifecycleOwner, Observer {
+                if (it.errorCode == 0) {
+                    article.collect = false
+                    adapter.notifyDataSetChanged()
+                    Snackbar.make(binding.root, "取消收藏成功", Snackbar.LENGTH_LONG).show()
+                } else if (it.errorCode == -1001) {
+                    //没有登录的话，collect为false，故下面的代码应该不会执行。
+                    Snackbar.make(binding.root, "未知的场景，请提bug", Snackbar.LENGTH_LONG).show()
+                }
+            })
+        } else {
+            viewModel.collect(article.id).observe(viewLifecycleOwner, Observer {
+                if (it.errorCode == 0) {
+                    article.collect = true
+                    adapter.notifyDataSetChanged()
+                    Snackbar.make(binding.root, "收藏成功", Snackbar.LENGTH_LONG).show()
+                } else if (it.errorCode == -1001) {
+                    findNavController().navigate(R.id.loginFragment)
+                }
+            })
+        }
     }
 
 }

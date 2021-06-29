@@ -1,22 +1,13 @@
 package com.longjunhao.wanjetpack.adapter
 
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import com.longjunhao.wanjetpack.R
 import com.longjunhao.wanjetpack.adapter.SearchAdapter.ArticleViewHolder
 import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.databinding.ListItemSearchBinding
-import com.longjunhao.wanjetpack.viewmodels.SearchViewModel
 
 /**
  * .ArticleAdapter
@@ -25,8 +16,7 @@ import com.longjunhao.wanjetpack.viewmodels.SearchViewModel
  * @date 2021/06/21
  */
 class SearchAdapter(
-    private val viewModel: SearchViewModel,
-    private val viewLifecycleOwner: LifecycleOwner
+    private val favoriteOnClick: (ApiArticle) -> Unit
 ) : PagingDataAdapter<ApiArticle, ArticleViewHolder>(ArticleDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
@@ -35,7 +25,8 @@ class SearchAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ),
+            favoriteOnClick
         )
     }
 
@@ -43,36 +34,21 @@ class SearchAdapter(
         val article = getItem(position)
         if (article != null) {
             holder.bind(article)
-            holder.binding.favorite.setOnClickListener { view ->
-                if (article.collect) {
-                    viewModel.unCollect(article.id).observe(viewLifecycleOwner, Observer {
-                        if (it.errorCode == 0) {
-                            article.collect = false
-                            holder.binding.favorite.setImageResource(R.drawable.ic_favorite_border_24)
-                            Snackbar.make(view, "取消收藏成功", Snackbar.LENGTH_LONG).show()
-                        } else if (it.errorCode == -1001) {
-                            //没有登录的话，collect为false，故下面的代码应该不会执行。
-                            Snackbar.make(view, "未知的场景，请提bug", Snackbar.LENGTH_LONG).show()
-                        }
-                    })
-                } else {
-                    viewModel.collect(article.id).observe(viewLifecycleOwner, Observer {
-                        if (it.errorCode == 0) {
-                            article.collect = true
-                            holder.binding.favorite.setImageResource(R.drawable.ic_favorite_24)
-                            Snackbar.make(view, "收藏成功", Snackbar.LENGTH_LONG).show()
-                        } else if (it.errorCode == -1001) {
-                            view.findNavController().navigate(R.id.loginFragment)
-                        }
-                    })
-                }
-            }
         }
     }
 
     class ArticleViewHolder(
-        val binding: ListItemSearchBinding
+        val binding: ListItemSearchBinding,
+        val favoriteOnClick: (ApiArticle) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.favorite.setOnClickListener {
+                binding.article?.let {
+                    favoriteOnClick(it)
+                }
+            }
+        }
 
         fun bind(item: ApiArticle) {
             binding.apply {

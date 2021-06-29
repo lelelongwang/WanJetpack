@@ -9,8 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
+import com.longjunhao.wanjetpack.R
 import com.longjunhao.wanjetpack.adapter.ProjectAdapter
 import com.longjunhao.wanjetpack.adapter.ProjectCategoryAdapter
+import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.data.project.ProjectCategory
 import com.longjunhao.wanjetpack.databinding.FragmentProjectBinding
 import com.longjunhao.wanjetpack.viewmodels.ProjectViewModel
@@ -25,6 +29,7 @@ class ProjectFragment : Fragment() {
     private var homeJob: Job? = null
     private val viewModel: ProjectViewModel by viewModels()
     private lateinit var binding: FragmentProjectBinding
+    private lateinit var projectAdapter: ProjectAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,15 +39,15 @@ class ProjectFragment : Fragment() {
         binding = FragmentProjectBinding.inflate(inflater, container, false)
 
         val categoryAdapter = ProjectCategoryAdapter(viewModel)
-        val projectAdapter = ProjectAdapter(viewModel, viewLifecycleOwner)
+        projectAdapter = ProjectAdapter { apiArticle -> adapterFavoriteOnClick(apiArticle) }
         binding.projectCategoryList.adapter = categoryAdapter
         binding.projectList.adapter = projectAdapter
-        subscribeUi(categoryAdapter, projectAdapter)
+        subscribeUi(categoryAdapter)
 
         return binding.root
     }
 
-    private fun subscribeUi(categoryAdapter: ProjectCategoryAdapter,adapter: ProjectAdapter){
+    private fun subscribeUi(categoryAdapter: ProjectCategoryAdapter){
         viewModel.projectCategory.observe(viewLifecycleOwner, Observer {
             if (it.errorCode == 0) {
                 categoryAdapter.submitList(it.data)
@@ -51,19 +56,44 @@ class ProjectFragment : Fragment() {
         })
         viewModel.currentSelectedItem.observe(viewLifecycleOwner, Observer {
             Log.d("TAG", "subscribeUi: ljh it${it.id}+ name${it.name}")
-            updateSelectItem(adapter,it)
+            updateSelectItem(it)
         })
     }
 
-    private fun updateSelectItem(adapter: ProjectAdapter, projectCategory: ProjectCategory) {
+    private fun updateSelectItem(projectCategory: ProjectCategory) {
         homeJob?.cancel()
         homeJob = lifecycleScope.launch {
             //TODO toolbarText的值尽量在xml中设置
             binding.toolbarText.text = projectCategory.name
             viewModel.getProjectArticle(projectCategory.id).collectLatest {
                 Log.d("TAG", "updateSelectItem: 测试。 it$it")
-                adapter.submitData(it)
+                projectAdapter.submitData(it)
             }
+        }
+    }
+
+    private fun adapterFavoriteOnClick (article: ApiArticle) {
+        if (article.collect) {
+            viewModel.unCollect(article.id).observe(viewLifecycleOwner, Observer {
+                if (it.errorCode == 0) {
+                    article.collect = false
+                    projectAdapter.notifyDataSetChanged()
+                    Snackbar.make(binding.root, "取消收藏成功", Snackbar.LENGTH_LONG).show()
+                } else if (it.errorCode == -1001) {
+                    //没有登录的话，collect为false，故下面的代码应该不会执行。
+                    Snackbar.make(binding.root, "未知的场景，请提bug", Snackbar.LENGTH_LONG).show()
+                }
+            })
+        } else {
+            viewModel.collect(article.id).observe(viewLifecycleOwner, Observer {
+                if (it.errorCode == 0) {
+                    article.collect = true
+                    projectAdapter.notifyDataSetChanged()
+                    Snackbar.make(binding.root, "收藏成功", Snackbar.LENGTH_LONG).show()
+                } else if (it.errorCode == -1001) {
+                    findNavController().navigate(R.id.loginFragment)
+                }
+            })
         }
     }
 

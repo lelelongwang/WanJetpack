@@ -87,7 +87,7 @@ WanJetpack
         - RecyclerViewAnimations： 新增、删除、更新 item的demo
         - RecyclerViewKotlin： ConcatAdapter的demo
             - 实现了ConcatAdapter，**能规避嵌套滑动**
-            - 实现了点击item的方案，WanJetpack建议参考
+            - [用Kotlin高阶函数处理 RecyclerView 中的点击事件](https://mp.weixin.qq.com/s/xtYtmn2zPRFcM4-uTVW3HA)
             - 实现了新增、删除item的方案及更新item动画
         - RecyclerViewSimple： kotlin版本普通demo
     - 默认的adapter：**RecyclerView.Adapter**：[认识 RecyclerView](https://zhuanlan.zhihu.com/p/363343211)
