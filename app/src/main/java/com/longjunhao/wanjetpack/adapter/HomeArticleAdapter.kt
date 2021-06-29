@@ -16,7 +16,7 @@ import com.longjunhao.wanjetpack.databinding.ListItemArticleBinding
  * @date 2021/05/21
  */
 class HomeArticleAdapter(
-    private val favoriteOnClick: (ApiArticle) -> Unit
+    private val favoriteOnClick: (ApiArticle, Int) -> Unit
 ) : PagingDataAdapter<ApiArticle, ArticleViewHolder>(ArticleDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
@@ -25,30 +25,29 @@ class HomeArticleAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ),
-            favoriteOnClick
+            )
         )
     }
 
+    /**
+     * favorite的点击事件没有放在ArticleViewHolder的init{}中，因为在ArticleViewHolder中获取不到点击的position
+     * todo： favorite的点击事件放在ViewHolder的init{}和adapter的onBindViewHolder中有什么区别吗？
+     */
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         val article = getItem(position)
         if (article != null) {
             holder.bind(article)
+            holder.binding.favorite.setOnClickListener {
+                holder.binding.article?.let {
+                    favoriteOnClick(it, position)
+                }
+            }
         }
     }
 
     class ArticleViewHolder(
-        val binding: ListItemArticleBinding,
-        val favoriteOnClick: (ApiArticle) -> Unit
+        val binding: ListItemArticleBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-
-        init {
-            binding.favorite.setOnClickListener {
-                binding.article?.let {
-                    favoriteOnClick(it)
-                }
-            }
-        }
 
         fun bind(item: ApiArticle) {
             binding.apply {

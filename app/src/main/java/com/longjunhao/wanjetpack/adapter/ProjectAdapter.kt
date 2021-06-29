@@ -16,7 +16,7 @@ import com.longjunhao.wanjetpack.data.ApiArticle
  * @date 2021/05/31
  */
 class ProjectAdapter(
-    private val favoriteOnClick: (ApiArticle) -> Unit
+    private val favoriteOnClick: (ApiArticle, Int) -> Unit
 ) : PagingDataAdapter<ApiArticle, ProjectViewHolder>(ProjectDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {
@@ -25,8 +25,7 @@ class ProjectAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ),
-            favoriteOnClick
+            )
         )
     }
 
@@ -34,21 +33,17 @@ class ProjectAdapter(
         val item = getItem(position)
         if (item != null) {
             holder.bind(item)
+            holder.binding.favorite.setOnClickListener {
+                holder.binding.project?.let {
+                    favoriteOnClick(it, position)
+                }
+            }
         }
     }
 
     class ProjectViewHolder(
-        val binding: ListItemProjectBinding,
-        val favoriteOnClick: (ApiArticle) -> Unit
+        val binding: ListItemProjectBinding
     ): RecyclerView.ViewHolder(binding.root){
-
-        init {
-            binding.favorite.setOnClickListener {
-                binding.project?.let {
-                    favoriteOnClick(it)
-                }
-            }
-        }
 
         fun bind(item: ApiArticle) {
             binding.apply {

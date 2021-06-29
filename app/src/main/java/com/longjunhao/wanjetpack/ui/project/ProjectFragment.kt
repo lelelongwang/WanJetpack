@@ -39,7 +39,7 @@ class ProjectFragment : Fragment() {
         binding = FragmentProjectBinding.inflate(inflater, container, false)
 
         val categoryAdapter = ProjectCategoryAdapter(viewModel)
-        projectAdapter = ProjectAdapter { apiArticle -> adapterFavoriteOnClick(apiArticle) }
+        projectAdapter = ProjectAdapter { apiArticle, position -> adapterFavoriteOnClick(apiArticle, position) }
         binding.projectCategoryList.adapter = categoryAdapter
         binding.projectList.adapter = projectAdapter
         subscribeUi(categoryAdapter)
@@ -72,12 +72,12 @@ class ProjectFragment : Fragment() {
         }
     }
 
-    private fun adapterFavoriteOnClick (article: ApiArticle) {
+    private fun adapterFavoriteOnClick (article: ApiArticle, position: Int) {
         if (article.collect) {
             viewModel.unCollect(article.id).observe(viewLifecycleOwner, Observer {
                 if (it.errorCode == 0) {
                     article.collect = false
-                    projectAdapter.notifyDataSetChanged()
+                    projectAdapter.notifyItemChanged(position)
                     Snackbar.make(binding.root, "取消收藏成功", Snackbar.LENGTH_LONG).show()
                 } else if (it.errorCode == -1001) {
                     //没有登录的话，collect为false，故下面的代码应该不会执行。
@@ -88,7 +88,7 @@ class ProjectFragment : Fragment() {
             viewModel.collect(article.id).observe(viewLifecycleOwner, Observer {
                 if (it.errorCode == 0) {
                     article.collect = true
-                    projectAdapter.notifyDataSetChanged()
+                    projectAdapter.notifyItemChanged(position)
                     Snackbar.make(binding.root, "收藏成功", Snackbar.LENGTH_LONG).show()
                 } else if (it.errorCode == -1001) {
                     findNavController().navigate(R.id.loginFragment)

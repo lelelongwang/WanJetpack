@@ -39,7 +39,7 @@ class SearchFragment : Fragment() {
         //databinding 双向绑定时要加上这行，否则获取 keyword 值为 null
         binding.searchModel = viewModel
 
-        articleAdapter = SearchAdapter { apiArticle -> adapterFavoriteOnClick(apiArticle) }
+        articleAdapter = SearchAdapter { apiArticle, position -> adapterFavoriteOnClick(apiArticle, position) }
         binding.articleList.adapter = articleAdapter
 
         binding.searchCancel.setOnClickListener {
@@ -73,12 +73,12 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun adapterFavoriteOnClick (article: ApiArticle) {
+    private fun adapterFavoriteOnClick (article: ApiArticle, position: Int) {
         if (article.collect) {
             viewModel.unCollect(article.id).observe(viewLifecycleOwner, Observer {
                 if (it.errorCode == 0) {
                     article.collect = false
-                    articleAdapter.notifyDataSetChanged()
+                    articleAdapter.notifyItemChanged(position)
                     Snackbar.make(binding.root, "取消收藏成功", Snackbar.LENGTH_LONG).show()
                 } else if (it.errorCode == -1001) {
                     //没有登录的话，collect为false，故下面的代码应该不会执行。
@@ -89,7 +89,7 @@ class SearchFragment : Fragment() {
             viewModel.collect(article.id).observe(viewLifecycleOwner, Observer {
                 if (it.errorCode == 0) {
                     article.collect = true
-                    articleAdapter.notifyDataSetChanged()
+                    articleAdapter.notifyItemChanged(position)
                     Snackbar.make(binding.root, "收藏成功", Snackbar.LENGTH_LONG).show()
                 } else if (it.errorCode == -1001) {
                     findNavController().navigate(R.id.loginFragment)

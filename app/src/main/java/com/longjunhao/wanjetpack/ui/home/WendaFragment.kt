@@ -36,7 +36,7 @@ class WendaFragment : Fragment() {
         binding = FragmentWendaBinding.inflate(inflater,container,false)
         context ?: return binding.root
 
-        articleAdapter = WendaAdapter { apiArticle -> adapterFavoriteOnClick(apiArticle) }
+        articleAdapter = WendaAdapter { apiArticle, position -> adapterFavoriteOnClick(apiArticle, position) }
         binding.articleList.adapter = articleAdapter
         subscribeUi()
 
@@ -52,12 +52,12 @@ class WendaFragment : Fragment() {
         }
     }
 
-    private fun adapterFavoriteOnClick (article: ApiArticle) {
+    private fun adapterFavoriteOnClick (article: ApiArticle, position: Int) {
         if (article.collect) {
             viewModel.unCollect(article.id).observe(viewLifecycleOwner, Observer {
                 if (it.errorCode == 0) {
                     article.collect = false
-                    articleAdapter.notifyDataSetChanged()
+                    articleAdapter.notifyItemChanged(position)
                     Snackbar.make(binding.root, "取消收藏成功", Snackbar.LENGTH_LONG).show()
                 } else if (it.errorCode == -1001) {
                     //没有登录的话，collect为false，故下面的代码应该不会执行。
@@ -68,7 +68,7 @@ class WendaFragment : Fragment() {
             viewModel.collect(article.id).observe(viewLifecycleOwner, Observer {
                 if (it.errorCode == 0) {
                     article.collect = true
-                    articleAdapter.notifyDataSetChanged()
+                    articleAdapter.notifyItemChanged(position)
                     Snackbar.make(binding.root, "收藏成功", Snackbar.LENGTH_LONG).show()
                 } else if (it.errorCode == -1001) {
                     findNavController().navigate(R.id.loginFragment)

@@ -16,7 +16,7 @@ import com.longjunhao.wanjetpack.databinding.ListItemWechatBinding
  * @date 2021/05/28
  */
 class WechatAdapter(
-    private val favoriteOnClick: (ApiArticle) -> Unit
+    private val favoriteOnClick: (ApiArticle, Int) -> Unit
 ) : PagingDataAdapter<ApiArticle, WechatViewHolder>(WechatDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WechatViewHolder {
@@ -25,8 +25,7 @@ class WechatAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ),
-            favoriteOnClick
+            )
         )
     }
 
@@ -34,21 +33,17 @@ class WechatAdapter(
         val wechat = getItem(position)
         if (wechat != null) {
             holder.bind(wechat)
+            holder.binding.favorite.setOnClickListener {
+                holder.binding.wechat?.let {
+                    favoriteOnClick(it, position)
+                }
+            }
         }
     }
 
     class WechatViewHolder(
-        val binding: ListItemWechatBinding,
-        val favoriteOnClick: (ApiArticle) -> Unit
+        val binding: ListItemWechatBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-
-        init {
-            binding.favorite.setOnClickListener {
-                binding.wechat?.let {
-                    favoriteOnClick(it)
-                }
-            }
-        }
 
         fun bind(item: ApiArticle) {
             binding.apply {

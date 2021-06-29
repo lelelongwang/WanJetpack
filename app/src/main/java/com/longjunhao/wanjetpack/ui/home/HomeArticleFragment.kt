@@ -41,7 +41,7 @@ class HomeArticleFragment : Fragment() {
         context ?: return binding.root
 
         val firstAdapter = HomeFirstAdapter()
-        articleAdapter = HomeArticleAdapter { apiArticle -> adapterFavoriteOnClick(apiArticle) }
+        articleAdapter = HomeArticleAdapter { apiArticle, position -> adapterFavoriteOnClick(apiArticle, position) }
         val concatAdapter = ConcatAdapter(firstAdapter, articleAdapter)
 
         binding.articleList.adapter = concatAdapter
@@ -89,12 +89,13 @@ class HomeArticleFragment : Fragment() {
      * 通过官方推荐的方案实现
      * 参考：https://mp.weixin.qq.com/s/xtYtmn2zPRFcM4-uTVW3HA
      */
-    private fun adapterFavoriteOnClick (article: ApiArticle) {
+    private fun adapterFavoriteOnClick (article: ApiArticle, position: Int) {
+        Log.d("HomeArticleFragment", "adapterFavoriteOnClick: ljh article.title=${article.title}  position=$position")
         if (article.collect) {
             viewModel.unCollect(article.id).observe(viewLifecycleOwner, Observer {
                 if (it.errorCode == 0) {
                     article.collect = false
-                    articleAdapter.notifyDataSetChanged()
+                    articleAdapter.notifyItemChanged(position)
                     Snackbar.make(binding.root, "取消收藏成功", Snackbar.LENGTH_LONG).show()
                 } else if (it.errorCode == -1001) {
                     //没有登录的话，collect为false，故下面的代码应该不会执行。
@@ -105,7 +106,7 @@ class HomeArticleFragment : Fragment() {
             viewModel.collect(article.id).observe(viewLifecycleOwner, Observer {
                 if (it.errorCode == 0) {
                     article.collect = true
-                    articleAdapter.notifyDataSetChanged()
+                    articleAdapter.notifyItemChanged(position)
                     Snackbar.make(binding.root, "收藏成功", Snackbar.LENGTH_LONG).show()
                 } else if (it.errorCode == -1001) {
                     //todo 这是通过网络返回发现没有登录，是否需要多加个条件：新增Boolean类型的isLogin保存

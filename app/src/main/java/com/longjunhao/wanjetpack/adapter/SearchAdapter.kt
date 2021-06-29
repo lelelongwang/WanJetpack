@@ -16,7 +16,7 @@ import com.longjunhao.wanjetpack.databinding.ListItemSearchBinding
  * @date 2021/06/21
  */
 class SearchAdapter(
-    private val favoriteOnClick: (ApiArticle) -> Unit
+    private val favoriteOnClick: (ApiArticle, Int) -> Unit
 ) : PagingDataAdapter<ApiArticle, ArticleViewHolder>(ArticleDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
@@ -25,8 +25,7 @@ class SearchAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ),
-            favoriteOnClick
+            )
         )
     }
 
@@ -34,21 +33,17 @@ class SearchAdapter(
         val article = getItem(position)
         if (article != null) {
             holder.bind(article)
+            holder.binding.favorite.setOnClickListener {
+                holder.binding.article?.let {
+                    favoriteOnClick(it, position)
+                }
+            }
         }
     }
 
     class ArticleViewHolder(
-        val binding: ListItemSearchBinding,
-        val favoriteOnClick: (ApiArticle) -> Unit
+        val binding: ListItemSearchBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-
-        init {
-            binding.favorite.setOnClickListener {
-                binding.article?.let {
-                    favoriteOnClick(it)
-                }
-            }
-        }
 
         fun bind(item: ApiArticle) {
             binding.apply {

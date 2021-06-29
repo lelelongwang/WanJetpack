@@ -16,7 +16,7 @@ import com.longjunhao.wanjetpack.databinding.ListItemWendaBinding
  * @date 2021/05/25
  */
 class WendaAdapter(
-    private val favoriteOnClick: (ApiArticle) -> Unit
+    private val favoriteOnClick: (ApiArticle, Int) -> Unit
 ) : PagingDataAdapter<ApiArticle, WendaViewHolder>(WendaDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WendaViewHolder {
@@ -25,8 +25,7 @@ class WendaAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ),
-            favoriteOnClick
+            )
         )
     }
 
@@ -34,21 +33,17 @@ class WendaAdapter(
         val wenda = getItem(position)
         if (wenda != null) {
             holder.bind(wenda)
+            holder.binding.favorite.setOnClickListener {
+                holder.binding.wenda?.let {
+                    favoriteOnClick(it, position)
+                }
+            }
         }
     }
 
     class WendaViewHolder(
-        val binding: ListItemWendaBinding,
-        val favoriteOnClick: (ApiArticle) -> Unit
+        val binding: ListItemWendaBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-
-        init {
-            binding.favorite.setOnClickListener {
-                binding.wenda?.let {
-                    favoriteOnClick(it)
-                }
-            }
-        }
 
         fun bind(item: ApiArticle) {
             binding.apply {
