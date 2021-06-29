@@ -78,6 +78,7 @@ class HomeArticleFragment : Fragment() {
             }
         })
 
+        // todo 需要优化当手指离开banner后，重新开始计时3秒后。即手指接触banner后，不在计时了
         viewModel.autoScrollBannerPage.observe(viewLifecycleOwner, Observer {
             //todo 是否可以把it去掉？
             firstAdapter.autoScrollBannerPage()
@@ -88,6 +89,13 @@ class HomeArticleFragment : Fragment() {
     /**
      * 通过官方推荐的方案实现
      * 参考：https://mp.weixin.qq.com/s/xtYtmn2zPRFcM4-uTVW3HA
+     *
+     * todo： 由于五个界面都用到 adapterFavoriteOnClick()方法，应该可以用BindingAdapter封装下。但是如果在
+     *   BindingAdapter中实现，由于 adapterFavoriteOnClick() 方法用到了ViewModel、viewLifecycleOwner、
+     *   article、position等，可能需要在list_item_article.xml传入的数据为 ViewModel，而不是 ApiArticle。
+     *
+     * todo： 现在不确定的是：布局里的数据官方建议传入data数据，即 ApiArticle；还是建议传入对应的ViewModel呢？
+     *
      */
     private fun adapterFavoriteOnClick (article: ApiArticle, position: Int) {
         Log.d("HomeArticleFragment", "adapterFavoriteOnClick: ljh article.title=${article.title}  position=$position")

@@ -8,7 +8,7 @@ WanJetpack
 - [views-widgets-samples](https://github.com/android/views-widgets-samples)
 - [user-interface-samples](https://github.com/android/user-interface-samples)
 - [architecture-samples](https://github.com/android/architecture-samples)
-- [compose-samples](https://github.com/android/compose-samples)
+- [compose-samples](https://github.com/android/compose-samples)： 本demo中暂时不涉及Compose功能
 
 ### 相关知识点
 
