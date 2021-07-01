@@ -50,8 +50,199 @@ WanJetpack
 - [Hilt]()
     - hilt 和 **Koin**
 
-- [Paging文档](https://developer.android.google.cn/topic/libraries/architecture/paging/v3-overview)
-    - [PagingWithNetworkSample](https://github.com/android/architecture-components-samples/tree/main/PagingWithNetworkSample)
+- [Paging 库](https://developer.android.google.cn/jetpack/androidx/releases/paging) **3.0.0正式版**已发布，普天同庆！Paging 库可帮助您加载和显示来自本地存储或网络中更大的数据集中的数据页面。此方法可让您的应用更高效地利用网络带宽和系统资源。Paging 库的组件旨在契合推荐的 Android 应用架构，流畅集成其他 Jetpack 组件，并提供一流的 Kotlin 支持。
+    - [官方文档](https://developer.android.google.cn/topic/libraries/architecture/paging/v3-overview)
+    - 官方demo：
+        - [PagingSample](https://github.com/android/architecture-components-samples/tree/main/PagingSample) ： 本地数据库的demo
+        - [PagingWithNetworkSample](https://github.com/android/architecture-components-samples/tree/main/PagingWithNetworkSample) ： 网络数据的demo
+    - Paging 库包含以下功能：
+        - 分页数据的内存中缓存。该功能可确保您的应用在处理分页数据时高效利用系统资源。
+        - 内置的请求重复信息删除功能，可确保您的应用高效利用网络带宽和系统资源。
+        - 可配置的 RecyclerView 适配器，会在用户滚动到已加载数据的末尾时自动请求数据。
+        - 对 Kotlin 协程和 Flow 以及 LiveData 和 RxJava 的一流支持。
+        - 内置对错误处理功能的支持，包括刷新和重试功能。
+    - Paging 组件及其在应用架构的集成：
+        ![Paging 组件及其在应用架构的集成](images/paging3-library-architecture.svg)
+    - 定义数据源 ： 数据源的定义取决于您从哪里加载数据。您仅需实现 PagingSource 或者 PagingSource 与 RemoteMediator 的组合:
+        - 如果您从**单个源加载数据**，例如**网络**、**本地数据**、**文件**、**内存缓存**等（不只是网络和数据库，其他如文件也可以使用Paging），实现 PagingSource 即可，如果您使用了 Room，从 2.3.0-alpha 开始，它将默认为您实现 PagingSource。
+        - 如果您从一个多层级数据源加载数据，就像带有本地数据库缓存的网络数据源那样。那么您需要实现 RemoteMediator 来合并两个数据源到一个本地数据库缓存的 PagingSource 中。
+    - PagingSource ：
+        - PagingSource 可以定义一个**分页数据的数据源**，以及从该数据源获取数据的方式。
+        - LoadParams：PagingSource 的 密封类（sealed），包含有关要执行的加载操作的信息，其中包括要加载的键和要加载的项数。作为load()函数的参数使用
+        - LoadResult：PagingSource 的 密封类（sealed），包含加载操作的结果。LoadResult 是一个密封的类，根据 load() 调用是否成功。作为load()函数的返回值
+        - getRefreshKey()： 该方法接受 PagingState 对象作为参数，并且当数据在初始加载后刷新或失效时，该方法会返回要传递给 load() 方法的键。在后续刷新数据时，Paging 库会自动调用此方法。
+        - load()： 下图说明了load() 函数如何接收每次加载的键并为后续加载提供键：
+            ![显示 load() 如何使用和更新键的流程图](images/paging3-source-load.svg)
+        - 代码示例：
+            ```kotlin
+                // 自定义PagingSource类
+                private const val ARTICLE_STARTING_PAGE_INDEX = 0
+
+                class HomeArticlePagingSource(
+                    private val api: WanJetpackApi
+                ) : PagingSource<Int, ApiArticle>() {
+
+                    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ApiArticle> {
+                        val page = params.key ?: ARTICLE_STARTING_PAGE_INDEX
+                        return try {
+                            val response = api.getHomeArticle(page)
+                            val datas = response.data.datas
+                            LoadResult.Page(
+                                data = datas,
+                                prevKey = if (page == ARTICLE_STARTING_PAGE_INDEX) null else page - 1,
+                                nextKey = if (page == response.data.pageCount) null else page + 1,
+                            )
+                        } catch (exception: Exception) {
+                            LoadResult.Error(exception)
+                        }
+                    }
+
+                    override fun getRefreshKey(state: PagingState<Int, ApiArticle>): Int? {
+                        return null
+                    }
+                }
+            ```
+    - PagingData ：
+        - **分页数据的容器**被称为 PagingData，每次刷新数据时，都会创建一个 PagingData 的实例。如果要创建 PagingData 数据流，您需要创建一个 Pager 实例，并提供一个 PagingConfig 配置对象和一个可以告诉 Pager 如何获取您实现的 PagerSource 的实例的函数，以供 Pager 使用。
+        - Pager 类提供的方法可显示来自 PagingSource 的 PagingData 对象的响应式流。Paging 库支持使用多种流类型，**包括** Flow、LiveData 以及 RxJava 中的 Flowable 和 Observable 类型。
+        - 通过 Pager().flow可以返回Flow<PagingData<ApiArticle>>。然后在ViewModel中.cachedIn(viewModelScope)， cachedIn()运算符使数据流可共享，并使用提供的 CoroutineScope 缓存加载的数据
+        - 代码示例： （注：Pager 的 remoteMediator 参数可选项， RemoteMediator 是重点）
+            ```kotlin
+                //Repository:
+                fun getHomeArticle(): Flow<PagingData<ApiArticle>> {
+                    return Pager(
+                        config = PagingConfig(enablePlaceholders = false, pageSize = HOME_ARTICLE_PAGE_SIZE),
+                        pagingSourceFactory = { HomeArticlePagingSource(api) }
+                    ).flow
+                }
+            ```
+            ```kotlin
+                //ViewModel:
+                fun getHomeArticle(): Flow<PagingData<ApiArticle>> {
+                    val newResult: Flow<PagingData<ApiArticle>> =
+                        repository.getHomeArticle().cachedIn(viewModelScope)
+                    currentArticleResult = newResult
+                    return newResult
+                }
+            ```
+    - PagingDataAdapter ：
+        - 与定义 RecyclerView 列表 Adapter 时的通常做法相同：必须定义 onCreateViewHolder() 和 onBindViewHolder() 方法；指定 ViewHoler 和 DiffUtil.ItemCallback
+        - Adapter 及 UI （ Activity、Fragment ）中的相关代码略。
+    - LoadType ： 是个 enum 类，包含三种状态：REFRESH、PREPEND、APPEND。在 PagingSource 的 LoadParams 类中用到。
+        - 官方介绍：Type of load a [PagingData] can trigger a [PagingSource] to perform.
+        - REFRESH：[PagingData] content being refreshed, which can be a result of [PagingSource] invalidation, refresh that may contain content updates, or the initial load.
+        - PREPEND：Load at the start of a [PagingData].
+        - APPEND：Load at the end of a [PagingData].
+    - LoadState ： 是个 sealed（密封） 类。
+        - 官方介绍：LoadState of a PagedList load - associated with a [LoadType].
+        - [LoadState] of any [LoadType] may be observed for UI purposes by registering a listener via [androidx.paging.PagingDataAdapter.addLoadStateListener] or [androidx.paging.AsyncPagingDataDiffer.addLoadStateListener]
+        - Paging 库通过 LoadState 对象公开可在界面中使用的加载状态。LoadState 根据当前的加载状态采用以下三种形式之一：
+            - 如果没有正在执行的加载操作且没有错误，则 LoadState 为 LoadState.NotLoading 对象。
+            - 如果有正在执行的加载操作，则 LoadState 为 LoadState.Loading 对象。
+            - 如果出现错误，则 LoadState 为 LoadState.Error 对象。
+    - 加载状态的三个场景：下拉刷新、上拉加载更多、首次进入页面中间的滚动条（及加载失败提醒）
+    - **显示加载状态** ： 可通过两种方法在界面中使用 LoadState：使用**监听器**，以及使用**特殊的列表适配器**在 RecyclerView 列表中直接显示加载状态。
+        - 方法一、 使用**监听器获取**加载状态： 为了获取加载状态以用于界面中的一般用途，PagingDataAdapter 中提供了 addLoadStateListener()、loadStateFlow 两种方式。来自 loadStateFlow 或 addLoadStateListener() 的更新可确保与界面的更新保持同步。这意味着，如果您收到 NotLoading.Incomplete 的 LoadState，则可以确定加载已完成，并且界面也已相应更新。
+            ```kotlin
+                // addLoadStateListener 方式。
+                articleAdapter.addLoadStateListener {
+                    when (it.refresh) {
+                        is LoadState.NotLoading -> {
+                            progressBar.visibility = View.INVISIBLE
+                            recyclerView.visibility = View.VISIBLE
+                        }
+                        is LoadState.Loading -> {
+                            progressBar.visibility = View.VISIBLE
+                            recyclerView.visibility = View.INVISIBLE
+                        }
+                        is LoadState.Error -> {
+                            val state = it.refresh as LoadState.Error
+                            progressBar.visibility = View.INVISIBLE
+                            Toast.makeText(this, "Load Error: ${state.error.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            ```
+            ```kotlin
+                // loadStateFlow 方式
+                // collectLatest 是个 suspend 函数，所以要在协程或者另一个 suspend 中调用
+                lifecycleScope.launch {
+                  pagingAdapter.loadStateFlow.collectLatest {
+                    progressBar.isVisible = it.refresh is LoadState.Loading
+                    retry.isVisible = it.refresh !is LoadState.Loading
+                    errorMsg.isVisible = it.refresh is LoadState.Error
+                  }
+                }
+            ```
+        - 方法二、 使用**适配器呈现**加载状态： Paging 库提供了另一个名为 LoadStateAdapter 的列表适配器，用于直接在显示的分页数据列表中呈现加载状态。**其实该方法就是**在PagingDataAdapter中把addLoadStateListener()和ConcatAdapter封装了一下
+            - 首先，创建一个实现 LoadStateAdapter 的类，并定义 onCreateViewHolder() 和 onBindViewHolder() 方法：
+                ```kotlin
+                    class LoadStateViewHolder(
+                      parent: ViewGroup,
+                      retry: () -> Unit
+                    ) : RecyclerView.ViewHolder(
+                      LayoutInflater.from(parent.context)
+                        .inflate(R.layout.load_state_item, parent, false)
+                    ) {
+                      private val binding = LoadStateItemBinding.bind(itemView)
+                      private val progressBar: ProgressBar = binding.progressBar
+                      private val errorMsg: TextView = binding.errorMsg
+                      private val retry: Button = binding.retryButton
+                        .also {
+                          it.setOnClickListener { retry() }
+                        }
+
+                      fun bind(loadState: LoadState) {
+                        if (loadState is LoadState.Error) {
+                          errorMsg.text = loadState.error.localizedMessage
+                        }
+
+                        progressBar.isVisible = loadState is LoadState.Loading
+                        retry.isVisible = loadState is LoadState.Error
+                        errorMsg.isVisible = loadState is LoadState.Error
+                      }
+                    }
+
+                    // Adapter that displays a loading spinner when
+                    // state = LoadState.Loading, and an error message and retry
+                    // button when state is LoadState.Error.
+                    class ExampleLoadStateAdapter(
+                      private val retry: () -> Unit
+                    ) : LoadStateAdapter<LoadStateViewHolder>() {
+
+                      override fun onCreateViewHolder(
+                        parent: ViewGroup,
+                        loadState: LoadState
+                      ) = LoadStateViewHolder(parent, retry)
+
+                      override fun onBindViewHolder(
+                        holder: LoadStateViewHolder,
+                        loadState: LoadState
+                      ) = holder.bind(loadState)
+                    }
+                ```
+            - 然后，从 PagingDataAdapter 对象调用 withLoadStateHeaderAndFooter() 方法：
+                ```kotlin
+                    pagingAdapter
+                      .withLoadStateHeaderAndFooter(
+                        header = ExampleLoadStateAdapter(adapter::retry),
+                        footer = ExampleLoadStateAdapter(adapter::retry)
+                      )
+                ```
+            - 如果您只想让 RecyclerView 在页眉或页脚中显示加载状态，则可以调用 withLoadStateHeader() 或 withLoadStateFooter()。 关于withLoadStateHeaderAndFooter()、withLoadStateHeader() 和 withLoadStateFooter()的实现，通过源码发现，其实就是用的PagingDataAdapter.addLoadStateListener()方案，只不过是通过ConcatAdapter封装下。即：**在PagingDataAdapter中把addLoadStateListener()和ConcatAdapter封装了一下，且返回值是ConcatAdapter**
+            - **注意**：由于withLoadStateHeaderAndFooter()、withLoadStateHeader() 和 withLoadStateFooter()返回的是ConcatAdapter，所以如果已经用构造函数ConcatAdapter(firstAdapter, articleAdapter)的话，再用withLoadState···添加页眉页脚会失败，因为用withLoadState···返回的也是ConcatAdapter就有两个ConcatAdapter了。**这个时候正确的做法是用withLoadState···创建ConcatAdapter，然后再用concatAdapter.addAdapter(0,firstAdapter)添加其它的adapter，且调用concatAdapter.addAdapter的位置在binding.articleList.adapter = concatAdapter前后都可以。**
+
+    - Pager ： Pager().flow 把 PagingSource 转换为 PagingData。在Repository中用到
+    - RemoteMediator ： 在Pager()中用到。
+        - 当您从一个多层级数据源加载数据时，应当实现一个 RemoteMediator。
+        - 一般用法为从网络请求数据并存入数据库。每当数据库中没有数据可以被展示时，就会触发 load() 方法。基于 **PagingState** 和 **LoadType**，我们可以构造下一页的数据请求。
+    - PagingConfig ： 在Pager()中用到
+    - PagingState ： 在自定义 PagingSource 的 getRefreshKey()方法中用到，在自定义RemoteMediator的load()方法中也用到了。
+        - 官方介绍：Snapshot state of Paging system including the loaded [pages], the last accessed [anchorPosition], and the [config] used.
+
+    - 参考博客：目前Paging已经发布3.0正式版，下面这个博客是alpha版本的，但可以参考：
+        - [使用 Paging 3 实现分页加载](https://mp.weixin.qq.com/s/_eUYkmjIQKRugd29wE2w0g)
+        - [Jetpack 系列之Paging3，看这一篇就够了~](https://huanglinqing.blog.csdn.net/article/details/109696431)
 
 - [Room]()
 
@@ -91,9 +282,27 @@ WanJetpack
             - 实现了新增、删除item的方案及更新item动画
         - RecyclerViewSimple： kotlin版本普通demo
     - 默认的adapter：**RecyclerView.Adapter**：[认识 RecyclerView](https://zhuanlan.zhihu.com/p/363343211)
-    - **ListAdapter**：继承RecyclerView.Adapter：[在 RecyclerView 中使用 ListAdapter](https://www.jianshu.com/p/16b364e20ee7)
-    - **ConcatAdapter**：https://mp.weixin.qq.com/s/QTaz45aLucX9mivVMbCZPQ
+    - **ListAdapter**：继承RecyclerView.Adapter：[在 RecyclerView 中使用 ListAdapter](https://mp.weixin.qq.com/s/WZi3cemT4bfrKfDIpjFdbg)
+    - **ConcatAdapter**：
+        - [使用 ConcatAdapter 顺序连接其他 Adapter](https://mp.weixin.qq.com/s/ppmokK3__Qx1S1cMU8y7Tg)、 [在 RecyclerView 中使用 header 快人一步](https://mp.weixin.qq.com/s/-_9JOG27-XUQzMW5vSVjlA)、 [新技术系列：RecyclerView 的新伙伴 ConcatAdapter](https://mp.weixin.qq.com/s/QTaz45aLucX9mivVMbCZPQ)
+        - [RecyclerView 的新伙伴 ConcatAdapter](https://mp.weixin.qq.com/s/QTaz45aLucX9mivVMbCZPQ),**待研究**。
     - **PagingDataAdapter**：继承RecyclerView.Adapter
+
+- [滑动刷新]()： 一般滑动刷新用于RecyclerView中的下拉刷新和上拉加载更多。
+    - [官方文档](https://developer.android.google.cn/training/swipe)
+    - 官方demo：
+        - [SwipeRefreshLayoutBasic](https://github.com/android/views-widgets-samples/tree/master/SwipeRefreshLayoutBasic)
+        - [SwipeRefreshMultipleViews](https://github.com/android/views-widgets-samples/tree/master/SwipeRefreshMultipleViews)
+    - 滑动刷新**界面**实现方案：
+        - 三方框架：
+        - 自己实现有三种方案：
+            - **方案一**： 可以在RecyclerView外层自定义一个布局，里面放三个控件：HeaderView、RecyclerView、FooterView。 结合SwipeRefreshLayout的话，只需要写个FooterView就行了。[Android 简单易上手的下拉刷新控件](https://www.jianshu.com/p/459e611c0f62)、[Android RecyclerView下拉刷新 & 上拉加载更多](https://www.jianshu.com/p/b502c5b59998)
+            - **方案二**： 可以作为RecyclerView的两个item处理，通过不同的Type类型区分
+            - **方案三**： 可以通过ConcatAdapter配置：[使用 ConcatAdapter 顺序连接其他 Adapter](https://mp.weixin.qq.com/s/ppmokK3__Qx1S1cMU8y7Tg)
+            - **方案四**： 可以直接用 PagingDataAdapter.withLoadStateFooter()加载页脚，但是下拉刷新还要自己实现。查询PagingDataAdapter中的实现方式发现，其实该方法也就**是方案三**，只是在PagingDataAdapter中已经封装好了。
+    - 滑动刷新**功能**实现方案：
+        - 如果是 ConcatAdapter、PagingDataAdapter ： 即用了 Paging3 ，相关说明参考上面的**Paging 库**说明。
+        - 如果是 ListAdapter 、 RecyclerView.Adapter：
 
 - [ViewPager2 库](https://developer.android.google.cn/jetpack/androidx/releases/viewpager2)
     - [官方文档](https://developer.android.google.cn/guide/navigation/navigation-swipe-view-2)

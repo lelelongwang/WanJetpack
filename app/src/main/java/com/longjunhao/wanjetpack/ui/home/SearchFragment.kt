@@ -10,8 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import com.longjunhao.wanjetpack.R
+import com.longjunhao.wanjetpack.adapter.FooterAdapter
 import com.longjunhao.wanjetpack.adapter.SearchAdapter
 import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.databinding.FragmentSearchBinding
@@ -40,7 +42,22 @@ class SearchFragment : Fragment() {
         binding.searchModel = viewModel
 
         articleAdapter = SearchAdapter { apiArticle, position -> adapterFavoriteOnClick(apiArticle, position) }
-        binding.articleList.adapter = articleAdapter
+        binding.articleList.adapter = articleAdapter.withLoadStateFooter(
+            FooterAdapter(articleAdapter::retry)
+        )
+
+        return binding.root
+    }
+
+    private fun subscribeUi(){
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            articleAdapter.refresh()
+        }
+        lifecycleScope.launchWhenCreated {
+            articleAdapter.loadStateFlow.collectLatest {
+                binding.swipeRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
+            }
+        }
 
         binding.searchCancel.setOnClickListener {
             findNavController().navigateUp()
@@ -61,10 +78,6 @@ class SearchFragment : Fragment() {
             subscribeUi(adapter)
         })*/
 
-        return binding.root
-    }
-
-    private fun subscribeUi(){
         homeJob?.cancel()
         homeJob = lifecycleScope.launch {
             viewModel.getSearchArticle().collectLatest {

@@ -48,29 +48,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingEnd="4dp"
-                android:paddingStart="@dimen/card_side_margin"
-                android:paddingTop="@dimen/header_margin"
+                android:layout_marginTop="@dimen/header_margin"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                 app:spanCount="1"
                 tools:listitem="@layout/list_item_project_category"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/project_list"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefreshLayout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingEnd="@dimen/card_side_margin"
-                android:paddingStart="4dp"
-                android:paddingTop="@dimen/header_margin"
-                app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-                app:spanCount="1"
                 app:layout_constraintStart_toEndOf="@id/project_category_list"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:listitem="@layout/list_item_project"/>
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/project_list"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingTop="@dimen/header_margin"
+                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                    app:spanCount="1"
+                    tools:listitem="@layout/list_item_project"/>
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

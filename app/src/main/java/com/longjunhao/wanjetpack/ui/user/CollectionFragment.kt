@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import com.longjunhao.wanjetpack.adapter.CollectionArticleAdapter
+import com.longjunhao.wanjetpack.adapter.FooterAdapter
 import com.longjunhao.wanjetpack.databinding.FragmentCollectionBinding
 import com.longjunhao.wanjetpack.viewmodels.CollectionViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,23 +22,36 @@ class CollectionFragment : Fragment() {
 
     private var homeJob: Job? = null
     private val viewModel: CollectionViewModel by viewModels()
+    private lateinit var binding: FragmentCollectionBinding
+    private lateinit var adapter: CollectionArticleAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentCollectionBinding.inflate(inflater,container,false)
+        binding = FragmentCollectionBinding.inflate(inflater,container,false)
         context ?: return binding.root
 
         val adapter = CollectionArticleAdapter()
-        binding.articleList.adapter = adapter
+        binding.articleList.adapter = adapter.withLoadStateFooter(
+            FooterAdapter(adapter::retry)
+        )
         subscribeUi(adapter)
 
         return binding.root
     }
 
     private fun subscribeUi(adapter: CollectionArticleAdapter){
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            adapter.refresh()
+        }
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest {
+                binding.swipeRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
+            }
+        }
+
         homeJob?.cancel()
         homeJob = lifecycleScope.launch {
             viewModel.getCollectionArticle().collectLatest {

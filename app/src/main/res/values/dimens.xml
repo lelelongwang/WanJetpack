@@ -41,7 +41,7 @@
     <dimen name="toolbar_elevation">5dp</dimen>
 
     <!-- Plant List Header margin -->
-    <dimen name="header_margin">24dp</dimen>
+    <dimen name="header_margin">12dp</dimen>
 
     <dimen name="gallery_header_margin">72dp</dimen>
 

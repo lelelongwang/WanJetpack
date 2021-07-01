@@ -10,9 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ConcatAdapter
+import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import com.longjunhao.wanjetpack.R
+import com.longjunhao.wanjetpack.adapter.FooterAdapter
 import com.longjunhao.wanjetpack.adapter.HomeArticleAdapter
 import com.longjunhao.wanjetpack.adapter.HomeFirstAdapter
 import com.longjunhao.wanjetpack.data.ApiArticle
@@ -42,7 +43,11 @@ class HomeArticleFragment : Fragment() {
 
         val firstAdapter = HomeFirstAdapter()
         articleAdapter = HomeArticleAdapter { apiArticle, position -> adapterFavoriteOnClick(apiArticle, position) }
-        val concatAdapter = ConcatAdapter(firstAdapter, articleAdapter)
+        val concatAdapter = articleAdapter.withLoadStateFooter(
+            //高阶函数也可以这样写： FooterAdapter { articleAdapter.retry() }
+            FooterAdapter(articleAdapter::retry)
+        )
+        concatAdapter.addAdapter(0,firstAdapter)
 
         binding.articleList.adapter = concatAdapter
         subscribeUi(firstAdapter)
@@ -51,6 +56,19 @@ class HomeArticleFragment : Fragment() {
     }
 
     private fun subscribeUi(firstAdapter: HomeFirstAdapter) {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            articleAdapter.refresh()
+        }
+        //下面的it是CombinedLoadStates数据类，有 refresh、Append、Prepend、source、mediator
+        // 区别：refresh在初始化刷新的使用， append在加载更多的时候使用，prepend在当前列表头部添加数据的时候使用。
+        // 也就是说如果监测的是it.refresh， 当加载第二页第三页的时候，状态是监听不到的。
+        // 下面对应的代码只有在onCreated 和执行 articleAdapter.refresh()调用
+        lifecycleScope.launchWhenCreated {
+            articleAdapter.loadStateFlow.collectLatest {
+                binding.swipeRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
+            }
+        }
+
         homeJob?.cancel()
         homeJob = lifecycleScope.launch(){
             viewModel.getHomeArticle().collectLatest {

@@ -9,8 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import com.longjunhao.wanjetpack.R
+import com.longjunhao.wanjetpack.adapter.FooterAdapter
 import com.longjunhao.wanjetpack.adapter.WechatAdapter
 import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.databinding.FragmentWechatArticleBinding
@@ -44,13 +46,24 @@ class WechatArticleFragment : Fragment() {
     ): View {
         binding = FragmentWechatArticleBinding.inflate(inflater,container,false)
         adapter = WechatAdapter { apiArticle, position -> adapterFavoriteOnClick(apiArticle, position) }
-        binding.articleList.adapter = adapter
+        binding.articleList.adapter = adapter.withLoadStateFooter(
+            FooterAdapter(adapter::retry)
+        )
         subscribeUi()
 
         return binding.root
     }
 
     private fun subscribeUi() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            adapter.refresh()
+        }
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest {
+                binding.swipeRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
+            }
+        }
+
         homeJob?.cancel()
         homeJob = lifecycleScope.launch(){
             wechatId?.let { wechatId ->

@@ -1,6 +1,7 @@
 package com.longjunhao.wanjetpack.data.home
 
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import com.longjunhao.wanjetpack.api.WanJetpackApi
 import com.longjunhao.wanjetpack.data.ApiArticle
 
@@ -29,5 +30,9 @@ class WendaPagingSource(
         } catch (exception: Exception) {
             LoadResult.Error(exception)
         }
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, ApiArticle>): Int? {
+        return null
     }
 }

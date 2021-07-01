@@ -9,8 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import com.longjunhao.wanjetpack.R
+import com.longjunhao.wanjetpack.adapter.FooterAdapter
 import com.longjunhao.wanjetpack.adapter.WendaAdapter
 import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.databinding.FragmentWendaBinding
@@ -37,13 +39,24 @@ class WendaFragment : Fragment() {
         context ?: return binding.root
 
         articleAdapter = WendaAdapter { apiArticle, position -> adapterFavoriteOnClick(apiArticle, position) }
-        binding.articleList.adapter = articleAdapter
+        binding.articleList.adapter = articleAdapter.withLoadStateFooter(
+            FooterAdapter(articleAdapter::retry)
+        )
         subscribeUi()
 
         return binding.root
     }
 
     private fun subscribeUi() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            articleAdapter.refresh()
+        }
+        lifecycleScope.launchWhenCreated {
+            articleAdapter.loadStateFlow.collectLatest {
+                binding.swipeRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
+            }
+        }
+
         homeJob?.cancel()
         homeJob = lifecycleScope.launch(){
             viewModel.getWenda().collectLatest {

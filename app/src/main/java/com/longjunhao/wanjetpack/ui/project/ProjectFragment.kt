@@ -10,8 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import com.longjunhao.wanjetpack.R
+import com.longjunhao.wanjetpack.adapter.FooterAdapter
 import com.longjunhao.wanjetpack.adapter.ProjectAdapter
 import com.longjunhao.wanjetpack.adapter.ProjectCategoryAdapter
 import com.longjunhao.wanjetpack.data.ApiArticle
@@ -41,13 +43,24 @@ class ProjectFragment : Fragment() {
         val categoryAdapter = ProjectCategoryAdapter(viewModel)
         projectAdapter = ProjectAdapter { apiArticle, position -> adapterFavoriteOnClick(apiArticle, position) }
         binding.projectCategoryList.adapter = categoryAdapter
-        binding.projectList.adapter = projectAdapter
+        binding.projectList.adapter = projectAdapter.withLoadStateFooter(
+            FooterAdapter(projectAdapter::retry)
+        )
         subscribeUi(categoryAdapter)
 
         return binding.root
     }
 
     private fun subscribeUi(categoryAdapter: ProjectCategoryAdapter){
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            projectAdapter.refresh()
+        }
+        lifecycleScope.launchWhenCreated {
+            projectAdapter.loadStateFlow.collectLatest {
+                binding.swipeRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
+            }
+        }
+
         viewModel.projectCategory.observe(viewLifecycleOwner, Observer {
             if (it.errorCode == 0) {
                 categoryAdapter.submitList(it.data)
