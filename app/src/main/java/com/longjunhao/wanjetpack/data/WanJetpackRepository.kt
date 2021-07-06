@@ -40,14 +40,22 @@ class WanJetpackRepository @Inject constructor(
 
     fun getHomeArticle(): Flow<PagingData<ApiArticle>> {
         return Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = HOME_ARTICLE_PAGE_SIZE),
+            config = PagingConfig(
+                prefetchDistance = 5,
+                enablePlaceholders = false,
+                pageSize = HOME_ARTICLE_PAGE_SIZE
+            ),
             pagingSourceFactory = { HomeArticlePagingSource(api) }
         ).flow
     }
 
     fun getWenda(): Flow<PagingData<ApiArticle>> {
         return Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = WENDA_PAGE_SIZE),
+            config = PagingConfig(
+                prefetchDistance = 5,
+                enablePlaceholders = false,
+                pageSize = WENDA_PAGE_SIZE
+            ),
             pagingSourceFactory = { WendaPagingSource(api)}
         ).flow
     }
@@ -58,7 +66,11 @@ class WanJetpackRepository @Inject constructor(
 
     fun getProjectArticle(categoryId: Int): Flow<PagingData<ApiArticle>> {
         return Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = PROJECT_PAGE_SIZE),
+            config = PagingConfig(
+                prefetchDistance = 5,
+                enablePlaceholders = false,
+                pageSize = PROJECT_PAGE_SIZE
+            ),
             pagingSourceFactory = { ProjectPagingSource(api, categoryId) }
         ).flow
     }
@@ -69,7 +81,11 @@ class WanJetpackRepository @Inject constructor(
 
     fun getWechatArticle(wechatId: Int): Flow<PagingData<ApiArticle>> {
         return Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = WECHAT_PAGE_SIZE),
+            config = PagingConfig(
+                prefetchDistance = 5,
+                enablePlaceholders = false,
+                pageSize = WECHAT_PAGE_SIZE
+            ),
             pagingSourceFactory = { WechatArticlePagingSource(api, wechatId) }
         ).flow
     }
@@ -89,7 +105,11 @@ class WanJetpackRepository @Inject constructor(
 
     fun getCollectionArticle(): Flow<PagingData<ApiArticle>> {
         return Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = COLLECTION_ARTICLE_PAGE_SIZE),
+            config = PagingConfig(
+                prefetchDistance = 5,
+                enablePlaceholders = false,
+                pageSize = COLLECTION_ARTICLE_PAGE_SIZE
+            ),
             pagingSourceFactory = { CollectionPagingSource(api) }
         ).flow
     }
@@ -104,7 +124,11 @@ class WanJetpackRepository @Inject constructor(
 
     fun getSearchArticle(keyword: String): Flow<PagingData<ApiArticle>> {
         return Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = SEARCH_ARTICLE_PAGE_SIZE),
+            config = PagingConfig(
+                prefetchDistance = 5,
+                enablePlaceholders = false,
+                pageSize = SEARCH_ARTICLE_PAGE_SIZE
+            ),
             pagingSourceFactory = { SearchPagingSource(api, keyword) }
         ).flow
     }
