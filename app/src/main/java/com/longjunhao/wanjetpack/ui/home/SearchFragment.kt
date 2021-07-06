@@ -1,11 +1,11 @@
 package com.longjunhao.wanjetpack.ui.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -45,6 +45,7 @@ class SearchFragment : Fragment() {
         binding.articleList.adapter = articleAdapter.withLoadStateFooter(
             FooterAdapter(articleAdapter::retry)
         )
+        subscribeUi()
 
         return binding.root
     }
@@ -65,7 +66,7 @@ class SearchFragment : Fragment() {
 
         binding.search.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                subscribeUi()
+                articleSearch()
             }
             true
         }
@@ -75,9 +76,11 @@ class SearchFragment : Fragment() {
         //  但是如果按照下面的方案，通过监听viewModel.keyword来解决的话，这样在搜索框中输入文本的过程中也会实时网络请
         //  求，会频繁的网络请求，感觉也不太好。故暂时注掉代码
         /*viewModel.keyword.observe(viewLifecycleOwner, Observer {
-            subscribeUi(adapter)
+            articleSearch()
         })*/
+    }
 
+    private fun articleSearch() {
         homeJob?.cancel()
         homeJob = lifecycleScope.launch {
             viewModel.getSearchArticle().collectLatest {
