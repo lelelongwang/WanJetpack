@@ -244,7 +244,9 @@ WanJetpack
         - [使用 Paging 3 实现分页加载](https://mp.weixin.qq.com/s/_eUYkmjIQKRugd29wE2w0g)
         - [Jetpack 系列之Paging3，看这一篇就够了~](https://huanglinqing.blog.csdn.net/article/details/109696431)
 
-- [Room]()
+- [Room 库](https://developer.android.google.cn/topic/libraries/architecture/room?hl=zh_cn)
+    - [官方指南](https://developer.android.google.cn/training/data-storage/room?hl=zh_cn)
+    - [官方 demo](略)
 
 - [DataStore]()
     - [使用 Jetpack DataStore 进行数据存储](https://mp.weixin.qq.com/s/26Uxotf3-oceKUbrujqX3w)
@@ -266,6 +268,7 @@ WanJetpack
         - [Fragment 间用 activityViewModels() 共享数据](https://developer.android.google.cn/topic/libraries/architecture/viewmodel)
         - [在 NavGraph 中使用 ViewModel 共享数据](https://mp.weixin.qq.com/s/Hl8Yuf2bkDlVlgdB4M-wrw)
     - [Safe Args 导航](https://developer.android.google.cn/guide/navigation/navigation-pass-data)
+    - Fragment间转场动画：[Android Material 组件 1.2.0 现已发布](https://mp.weixin.qq.com/s/PZD8RxrqP7_RAjXIo345aQ)
 
 - [Preference 库](https://developer.android.google.cn/jetpack/androidx/releases/preference?hl=zh_cn)
     - [官方指南](https://developer.android.google.cn/guide/topics/ui/settings?hl=zh_cn)
@@ -294,15 +297,29 @@ WanJetpack
         - [SwipeRefreshLayoutBasic](https://github.com/android/views-widgets-samples/tree/master/SwipeRefreshLayoutBasic)
         - [SwipeRefreshMultipleViews](https://github.com/android/views-widgets-samples/tree/master/SwipeRefreshMultipleViews)
     - 滑动刷新**界面**实现方案：
-        - 三方框架：
+        - 三方框架：[SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)
         - 自己实现有三种方案：
             - **方案一**： 可以在RecyclerView外层自定义一个布局，里面放三个控件：HeaderView、RecyclerView、FooterView。 结合SwipeRefreshLayout的话，只需要写个FooterView就行了。[Android 简单易上手的下拉刷新控件](https://www.jianshu.com/p/459e611c0f62)、[Android RecyclerView下拉刷新 & 上拉加载更多](https://www.jianshu.com/p/b502c5b59998)
             - **方案二**： 可以作为RecyclerView的两个item处理，通过不同的Type类型区分
             - **方案三**： 可以通过ConcatAdapter配置：[使用 ConcatAdapter 顺序连接其他 Adapter](https://mp.weixin.qq.com/s/ppmokK3__Qx1S1cMU8y7Tg)
             - **方案四**： 可以直接用 PagingDataAdapter.withLoadStateFooter()加载页脚，但是下拉刷新还要自己实现。查询PagingDataAdapter中的实现方式发现，其实该方法也就**是方案三**，只是在PagingDataAdapter中已经封装好了。
+            - 关于下拉刷新，还可以利用左滑删除的思想实现，但是体验不是特别理想，暂时pass该方案
     - 滑动刷新**功能**实现方案：
         - 如果是 ConcatAdapter、PagingDataAdapter ： 即用了 Paging3 ，相关说明参考上面的**Paging 库**说明。
         - 如果是 ListAdapter 、 RecyclerView.Adapter：
+        - 下拉刷新、左滑删除参考demo：
+            - [AndroidSwipeLayout](https://github.com/daimajia/AndroidSwipeLayout)
+            - [SwipeRecyclerView](https://github.com/yanzhenjie/SwipeRecyclerView)
+            - [Android 简单易上手的下拉刷新控件](https://www.jianshu.com/p/459e611c0f62)
+
+- Animation 动画： 下拉刷新场景通过属性动画实现
+    - [官方文档](https://developer.android.google.cn/training/animation)
+    - [属性动画](https://developer.android.google.cn/guide/topics/graphics/prop-animation)：
+        - ValueAnimator： 属性动画的主计时引擎，它也可计算要添加动画效果的属性的值。它具有计算动画值所需的所有核心功能，同时包含每个动画的计时详情、有关动画是否重复播放的信息、用于接收更新事件的监听器以及设置待评估自定义类型的功能。为属性添加动画效果分为两个步骤：计算添加动画效果之后的值，以及对要添加动画效果的对象和属性设置这些值。ValueAnimator 不会执行第二个步骤，因此，您必须监听由 ValueAnimator 计算的值的更新情况，并使用您自己的逻辑修改要添加动画效果的对象。如需了解详情，请参阅使用 ValueAnimator 添加动画效果部分。
+        - ObjectAnimator： ValueAnimator 的子类，用于设置目标对象和对象属性以添加动画效果。此类会在计算出动画的新值后相应地更新属性。在大多数情况下，您不妨使用 ObjectAnimator，因为它可以极大地简化对目标对象的值添加动画效果这一过程。不过，有时您需要直接使用 ValueAnimator，因为 ObjectAnimator 存在其他一些限制，例如要求目标对象具有特定的访问器方法。
+        - AnimationSet： 此类提供一种将动画分组在一起的机制，以使它们彼此相对运行。您可以将动画设置为一起播放、按顺序播放或者在指定的延迟时间后播放。如需了解详情，请参阅使用 AnimatorSet 编排多个动画部分。
+        - LayoutTransition：
+        - LayoutAnimations：
 
 - [ViewPager2 库](https://developer.android.google.cn/jetpack/androidx/releases/viewpager2)
     - [官方文档](https://developer.android.google.cn/guide/navigation/navigation-swipe-view-2)

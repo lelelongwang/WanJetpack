@@ -1,14 +1,12 @@
 package com.longjunhao.wanjetpack.data
 
 import android.util.Log
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.longjunhao.wanjetpack.api.WanJetpackApi
-import com.longjunhao.wanjetpack.data.home.ApiBanner
-import com.longjunhao.wanjetpack.data.home.HomeArticlePagingSource
-import com.longjunhao.wanjetpack.data.home.SearchPagingSource
-import com.longjunhao.wanjetpack.data.home.WendaPagingSource
+import com.longjunhao.wanjetpack.data.home.*
 import com.longjunhao.wanjetpack.data.project.ProjectCategory
 import com.longjunhao.wanjetpack.data.project.ProjectPagingSource
 import com.longjunhao.wanjetpack.data.user.CollectionPagingSource
@@ -27,7 +25,8 @@ import javax.inject.Singleton
  */
 @Singleton
 class WanJetpackRepository @Inject constructor(
-    private val api: WanJetpackApi
+    private val api: WanJetpackApi,
+    private val db: AppDatabase
 ) {
     companion object {
         private const val HOME_ARTICLE_PAGE_SIZE = 20
@@ -38,15 +37,23 @@ class WanJetpackRepository @Inject constructor(
         private const val SEARCH_ARTICLE_PAGE_SIZE = 20
     }
 
+    /**
+     * todo 由于RemoteMediator还有很多问题，暂时先注释掉，等发布正式版再来适配
+     */
+    //@OptIn(ExperimentalPagingApi::class)
     fun getHomeArticle(): Flow<PagingData<ApiArticle>> {
         return Pager(
             config = PagingConfig(
+                initialLoadSize = 10,
                 prefetchDistance = 5,
                 enablePlaceholders = false,
                 pageSize = HOME_ARTICLE_PAGE_SIZE
             ),
             pagingSourceFactory = { HomeArticlePagingSource(api) }
-        ).flow
+            //remoteMediator = ArticleRemoteMediator(api, db)
+        ) /*{
+            db.articleDao().getLocalArticle()
+        }*/.flow
     }
 
     fun getWenda(): Flow<PagingData<ApiArticle>> {

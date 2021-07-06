@@ -5,6 +5,7 @@ buildscript {
         kotlin_version = "1.4.30"
         hilt_version ='2.33-beta'
         nav_version = "2.3.5"
+        room_version = "2.3.0"
     }
 
     repositories {
