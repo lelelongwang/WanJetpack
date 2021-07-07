@@ -1,13 +1,18 @@
 package com.longjunhao.wanjetpack.viewmodels
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.longjunhao.wanjetpack.data.ApiArticle
+import com.longjunhao.wanjetpack.data.ApiResponse
 import com.longjunhao.wanjetpack.data.WanJetpackRepository
+import com.longjunhao.wanjetpack.util.API_RESPONSE_NO_NET
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 /**
@@ -39,9 +44,33 @@ class HomeArticleViewModel @Inject constructor(
      *
      *  参考： https://mp.weixin.qq.com/s/p5H51RC6QfyyoAcQ1aGRLg
      *
+     *
+     * // A retrying data fetcher with doubling back-off
+     * val user = liveData {
+     *     var backOffTime = 1_000
+     *     var succeeded = false
+     *     while(!succeeded) {
+     *         try {
+     *             emit(api.fetch(id))
+     *             succeeded = true
+     *         } catch(ioError : IOException) {
+     *             delay(backOffTime)
+     *             backOffTime *= minOf(backOffTime * 2, 60_000)
+     *         }
+     *     }
+     * }
+     *
+     * todo :
+     *  banner、项目分类（projectCategory）、微信公众号名（wechatName）需要用上面的方案来解决网络重新打开
+     *  后，自动网络请求获取数据
+     *
      */
     val bannerList = liveData {
-        emit(repository.getBanner())
+        try {
+            emit(repository.getBanner())
+        } catch (e: UnknownHostException) {
+            emit(ApiResponse(null, API_RESPONSE_NO_NET, e.toString()))
+        }
     }
 
     /**
@@ -60,13 +89,21 @@ class HomeArticleViewModel @Inject constructor(
      * todo ：和adapter一样，重复的部分应该可以写在baseViewModel中
      */
     fun collect(id: Int) = liveData {
-        emit(repository.collect(id))
+        try {
+            emit(repository.collect(id))
+        } catch (e: UnknownHostException) {
+            emit(ApiResponse(null, API_RESPONSE_NO_NET, e.toString()))
+        }
     }
 
     /**
      * todo ：和adapter一样，重复的部分应该可以写在baseViewModel中
      */
     fun unCollect(id: Int) = liveData {
-        emit(repository.unCollect(id))
+        try {
+            emit(repository.unCollect(id))
+        } catch (e: UnknownHostException) {
+            emit(ApiResponse(null, API_RESPONSE_NO_NET, e.toString()))
+        }
     }
 }

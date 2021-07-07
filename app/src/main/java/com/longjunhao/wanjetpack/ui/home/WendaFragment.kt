@@ -16,6 +16,7 @@ import com.longjunhao.wanjetpack.adapter.FooterAdapter
 import com.longjunhao.wanjetpack.adapter.WendaAdapter
 import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.databinding.FragmentWendaBinding
+import com.longjunhao.wanjetpack.util.API_RESPONSE_NO_NET
 import com.longjunhao.wanjetpack.viewmodels.WendaViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -75,6 +76,8 @@ class WendaFragment : Fragment() {
                 } else if (it.errorCode == -1001) {
                     //没有登录的话，collect为false，故下面的代码应该不会执行。
                     Snackbar.make(binding.root, "未知的场景，请提bug", Snackbar.LENGTH_LONG).show()
+                } else if (it.errorCode == API_RESPONSE_NO_NET) {
+                    Snackbar.make(binding.root, getString(R.string.no_net), Snackbar.LENGTH_LONG).show()
                 }
             })
         } else {
@@ -85,6 +88,8 @@ class WendaFragment : Fragment() {
                     Snackbar.make(binding.root, "收藏成功", Snackbar.LENGTH_LONG).show()
                 } else if (it.errorCode == -1001) {
                     findNavController().navigate(R.id.loginFragment)
+                } else if (it.errorCode == API_RESPONSE_NO_NET) {
+                    Snackbar.make(binding.root, getString(R.string.no_net), Snackbar.LENGTH_LONG).show()
                 }
             })
         }

@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.longjunhao.wanjetpack.R
 import com.longjunhao.wanjetpack.databinding.FragmentUserBinding
+import com.longjunhao.wanjetpack.util.API_RESPONSE_NO_NET
 import com.longjunhao.wanjetpack.util.SharedPrefObject
 import com.longjunhao.wanjetpack.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +56,8 @@ class UserFragment : Fragment() {
                     viewModel.isLogin.postValue(false)
                     SharedPrefObject.put(SharedPrefObject.KEY_IS_LOGIN, false)
                     SharedPrefObject.put(SharedPrefObject.KEY_LOGIN_NAME, "")
+                } else if (it.errorCode == API_RESPONSE_NO_NET) {
+                    Snackbar.make(binding.root, getString(R.string.no_net), Snackbar.LENGTH_LONG).show()
                 }
             })
         }

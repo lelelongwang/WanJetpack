@@ -19,6 +19,7 @@ import com.longjunhao.wanjetpack.adapter.HomeFirstAdapter
 import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.data.home.ApiBanner
 import com.longjunhao.wanjetpack.databinding.FragmentHomeArticleBinding
+import com.longjunhao.wanjetpack.util.API_RESPONSE_NO_NET
 import com.longjunhao.wanjetpack.viewmodels.HomeArticleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -93,6 +94,8 @@ class HomeArticleFragment : Fragment() {
                     val newBannerList = newList.map { banner -> banner.id }
                     Log.d("HomeArticleFragment", "bannerList: ljh originalBannerList=$originalBannerList  newBannerList=$newBannerList")
                 }
+            } else if (it.errorCode == API_RESPONSE_NO_NET) {
+                Snackbar.make(binding.root, getString(R.string.no_net), Snackbar.LENGTH_LONG).show()
             }
         })
 
@@ -126,6 +129,8 @@ class HomeArticleFragment : Fragment() {
                 } else if (it.errorCode == -1001) {
                     //没有登录的话，collect为false，故下面的代码应该不会执行。
                     Snackbar.make(binding.root, "未知的场景，请提bug", Snackbar.LENGTH_LONG).show()
+                } else if (it.errorCode == API_RESPONSE_NO_NET) {
+                    Snackbar.make(binding.root, getString(R.string.no_net), Snackbar.LENGTH_LONG).show()
                 }
             })
         } else {
@@ -138,6 +143,8 @@ class HomeArticleFragment : Fragment() {
                     //todo 这是通过网络返回发现没有登录，是否需要多加个条件：新增Boolean类型的isLogin保存
                     // 在SharedPreferences中呢? 登录动画需要优化
                     findNavController().navigate(R.id.loginFragment)
+                } else if (it.errorCode == API_RESPONSE_NO_NET) {
+                    Snackbar.make(binding.root, getString(R.string.no_net), Snackbar.LENGTH_LONG).show()
                 }
             })
         }

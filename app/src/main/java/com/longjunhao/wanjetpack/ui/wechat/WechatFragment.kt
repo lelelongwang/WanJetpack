@@ -8,10 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.longjunhao.wanjetpack.R
 import com.longjunhao.wanjetpack.data.wechat.WechatCategory
 import com.longjunhao.wanjetpack.databinding.FragmentWechatBinding
+import com.longjunhao.wanjetpack.util.API_RESPONSE_NO_NET
 import com.longjunhao.wanjetpack.viewmodels.WechatViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,6 +37,8 @@ class WechatFragment : Fragment() {
         viewModel.wechatName.observe(viewLifecycleOwner, Observer {
             if (it.errorCode == 0) {
                 it.data?.let { list -> initViewPager(list) }
+            } else if (it.errorCode == API_RESPONSE_NO_NET) {
+                Snackbar.make(binding.root, getString(R.string.no_net), Snackbar.LENGTH_LONG).show()
             }
         })
     }

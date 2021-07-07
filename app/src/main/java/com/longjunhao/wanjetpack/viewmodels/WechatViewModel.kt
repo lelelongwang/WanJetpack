@@ -1,8 +1,12 @@
 package com.longjunhao.wanjetpack.viewmodels
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import com.longjunhao.wanjetpack.data.ApiResponse
 import com.longjunhao.wanjetpack.data.WanJetpackRepository
+import com.longjunhao.wanjetpack.util.API_RESPONSE_NO_NET
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 /**
@@ -17,6 +21,10 @@ class WechatViewModel @Inject constructor(
 ) : ViewModel() {
 
     val wechatName = liveData {
-        emit( repository.getWechatName())
+        try {
+            emit( repository.getWechatName())
+        } catch (e: UnknownHostException) {
+            emit(ApiResponse(null, API_RESPONSE_NO_NET, e.toString()))
+        }
     }
 }

@@ -2,9 +2,12 @@ package com.longjunhao.wanjetpack.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.longjunhao.wanjetpack.data.ApiResponse
 import com.longjunhao.wanjetpack.data.WanJetpackRepository
+import com.longjunhao.wanjetpack.util.API_RESPONSE_NO_NET
 import com.longjunhao.wanjetpack.util.SharedPrefObject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 /**
@@ -77,20 +80,32 @@ class SharedViewModel @Inject constructor(
      * 然后会observe执行的结果。
      */
     fun login() = liveData {
-        emit(repository.login(username.value ?: "", password.value ?: ""))
+        try {
+            emit(repository.login(username.value ?: "", password.value ?: ""))
+        } catch (e: UnknownHostException) {
+            emit(ApiResponse(null, API_RESPONSE_NO_NET, e.toString()))
+        }
     }
 
     fun register() = liveData {
-        emit(
-            repository.register(
-                username.value ?: "",
-                password.value ?: "",
-                repassword.value ?: ""
+        try {
+            emit(
+                repository.register(
+                    username.value ?: "",
+                    password.value ?: "",
+                    repassword.value ?: ""
+                )
             )
-        )
+        } catch (e: UnknownHostException) {
+            emit(ApiResponse(null, API_RESPONSE_NO_NET, e.toString()))
+        }
     }
 
     fun logout() = liveData {
-        emit(repository.logout())
+        try {
+            emit(repository.logout())
+        } catch (e: UnknownHostException) {
+            emit(ApiResponse(null, API_RESPONSE_NO_NET, e.toString()))
+        }
     }
 }

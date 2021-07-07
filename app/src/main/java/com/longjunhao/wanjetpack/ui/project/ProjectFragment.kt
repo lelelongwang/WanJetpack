@@ -19,6 +19,7 @@ import com.longjunhao.wanjetpack.adapter.ProjectCategoryAdapter
 import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.data.project.ProjectCategory
 import com.longjunhao.wanjetpack.databinding.FragmentProjectBinding
+import com.longjunhao.wanjetpack.util.API_RESPONSE_NO_NET
 import com.longjunhao.wanjetpack.viewmodels.ProjectViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -65,6 +66,8 @@ class ProjectFragment : Fragment() {
             if (it.errorCode == 0) {
                 categoryAdapter.submitList(it.data)
                 viewModel.currentSelectedItem.postValue(it.data?.get(0))
+            } else if (it.errorCode == API_RESPONSE_NO_NET) {
+                Snackbar.make(binding.root, getString(R.string.no_net), Snackbar.LENGTH_LONG).show()
             }
         })
         viewModel.currentSelectedItem.observe(viewLifecycleOwner, Observer {
@@ -95,6 +98,8 @@ class ProjectFragment : Fragment() {
                 } else if (it.errorCode == -1001) {
                     //没有登录的话，collect为false，故下面的代码应该不会执行。
                     Snackbar.make(binding.root, "未知的场景，请提bug", Snackbar.LENGTH_LONG).show()
+                } else if (it.errorCode == API_RESPONSE_NO_NET) {
+                    Snackbar.make(binding.root, getString(R.string.no_net), Snackbar.LENGTH_LONG).show()
                 }
             })
         } else {
@@ -105,6 +110,8 @@ class ProjectFragment : Fragment() {
                     Snackbar.make(binding.root, "收藏成功", Snackbar.LENGTH_LONG).show()
                 } else if (it.errorCode == -1001) {
                     findNavController().navigate(R.id.loginFragment)
+                } else if (it.errorCode == API_RESPONSE_NO_NET) {
+                    Snackbar.make(binding.root, getString(R.string.no_net), Snackbar.LENGTH_LONG).show()
                 }
             })
         }
