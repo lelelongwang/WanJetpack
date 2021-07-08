@@ -49,8 +49,12 @@ class WendaFragment : Fragment() {
     }
 
     private fun subscribeUi() {
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            articleAdapter.refresh()
+        binding.swipeRefreshLayout.apply {
+            setColorSchemeResources(R.color.jetpack_green_900)
+            setProgressBackgroundColorSchemeResource(R.color.jetpack_green_500)
+            setOnRefreshListener {
+                articleAdapter.refresh()
+            }
         }
         lifecycleScope.launchWhenCreated {
             articleAdapter.loadStateFlow.collectLatest {

@@ -7,6 +7,7 @@
     <string name="tab_project">项目</string>
     <string name="tab_wechat">公众号</string>
     <string name="tab_user">我</string>
+    <string name="actionbar_collection">我的收藏</string>
     <string name="login">点击登录或注册</string>
     <string name="login_fail">账号或密码错误，请重新输入</string>
     <string name="register_fail">注册错误，请重重新输入</string>

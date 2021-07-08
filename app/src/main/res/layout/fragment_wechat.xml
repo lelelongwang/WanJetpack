@@ -29,6 +29,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:tabIconTint="@drawable/tab_icon_color_selector"
                 app:tabMode="scrollable"
+                app:tabRippleColor="@android:color/transparent"
                 app:tabTextColor="?attr/colorPrimaryDark"/>
 
         </com.google.android.material.appbar.AppBarLayout>

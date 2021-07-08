@@ -57,8 +57,12 @@ class HomeArticleFragment : Fragment() {
     }
 
     private fun subscribeUi(firstAdapter: HomeFirstAdapter) {
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            articleAdapter.refresh()
+        binding.swipeRefreshLayout.apply {
+            setColorSchemeResources(R.color.jetpack_green_900)
+            setProgressBackgroundColorSchemeResource(R.color.jetpack_green_500)
+            setOnRefreshListener {
+                articleAdapter.refresh()
+            }
         }
         //下面的it是CombinedLoadStates数据类，有 refresh、Append、Prepend、source、mediator
         // 区别：refresh在初始化刷新的使用， append在加载更多的时候使用，prepend在当前列表头部添加数据的时候使用。

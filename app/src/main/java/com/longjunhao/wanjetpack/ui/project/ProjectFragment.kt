@@ -53,8 +53,12 @@ class ProjectFragment : Fragment() {
     }
 
     private fun subscribeUi(categoryAdapter: ProjectCategoryAdapter){
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            projectAdapter.refresh()
+        binding.swipeRefreshLayout.apply {
+            setColorSchemeResources(R.color.jetpack_green_900)
+            setProgressBackgroundColorSchemeResource(R.color.jetpack_green_500)
+            setOnRefreshListener {
+                projectAdapter.refresh()
+            }
         }
         lifecycleScope.launchWhenCreated {
             projectAdapter.loadStateFlow.collectLatest {

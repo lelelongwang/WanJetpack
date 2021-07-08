@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import com.longjunhao.wanjetpack.R
 import com.longjunhao.wanjetpack.adapter.CollectionArticleAdapter
 import com.longjunhao.wanjetpack.adapter.FooterAdapter
 import com.longjunhao.wanjetpack.databinding.FragmentCollectionBinding
@@ -43,8 +44,12 @@ class CollectionFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: CollectionArticleAdapter){
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            adapter.refresh()
+        binding.swipeRefreshLayout.apply {
+            setColorSchemeResources(R.color.jetpack_green_900)
+            setProgressBackgroundColorSchemeResource(R.color.jetpack_green_500)
+            setOnRefreshListener {
+                adapter.refresh()
+            }
         }
         lifecycleScope.launchWhenCreated {
             adapter.loadStateFlow.collectLatest {

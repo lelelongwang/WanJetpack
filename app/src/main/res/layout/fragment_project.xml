@@ -72,6 +72,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
+                    android:overScrollMode="never"
                     android:paddingTop="@dimen/header_margin"
                     app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                     app:spanCount="1"

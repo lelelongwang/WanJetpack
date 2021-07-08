@@ -1,18 +1,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- To see how these attributes are used, please visit https://material.io/develop/android/theming/color/ -->
     <!-- Base application theme. -->
-    <style name="Theme.WanJetpack" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_test</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+    <style name="Base.Theme.WanJetpack" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/jetpack_green_night</item>
+        <item name="colorOnPrimary">@color/jetpack_yellow_300</item>
+        <item name="colorPrimaryDark">@color/jetpack_green_700</item>
+        <item name="colorOnSurface">@color/jetpack_white</item>
+        <item name="colorAccent">@color/jetpack_green_300</item>
+        <item name="colorSurface">@color/jetpack_green_900</item>
+        <item name="colorSecondary">@color/jetpack_yellow_300</item>
+<!--        <item name="android:colorBackground">@color/jetpack_green_900</item>-->
     </style>
+
+    <style name="Theme.WanJetpack" parent="Base.Theme.WanJetpack"/>
+
 
     <style name="Theme.WanJetpack.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -20,5 +23,9 @@
     </style>
 
     <style name="Theme.WanJetpack.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
+
+    <style name="TextAppearance.Sunflower.Toolbar.Text" parent="TextAppearance.MaterialComponents.Headline5" >
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
 
 </resources>
