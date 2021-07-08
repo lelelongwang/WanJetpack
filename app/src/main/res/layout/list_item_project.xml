@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:padding="4dp">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/project_pic"
                 android:layout_width="60dp"
                 android:layout_height="@dimen/plant_item_image_height"

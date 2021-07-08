@@ -26,9 +26,9 @@
             android:layout_height="wrap_content"
             android:padding="4dp">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/projectCategoryText"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
                 android:text="@{projectCategory.name}"
