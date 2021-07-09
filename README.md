@@ -311,6 +311,12 @@ WanJetpack
             - [AndroidSwipeLayout](https://github.com/daimajia/AndroidSwipeLayout)
             - [SwipeRecyclerView](https://github.com/yanzhenjie/SwipeRecyclerView)
             - [Android 简单易上手的下拉刷新控件](https://www.jianshu.com/p/459e611c0f62)
+- 加载状态的几个场景：下拉刷新、上拉加载更多、底部的已加载全部内容、首次进入页面的加载状态（及加载失败提醒）
+    - 下拉刷新、上拉加载更多：略
+    - 首次进入页面的加载状态：
+    - 底部的已加载全部内容：方案比较多，个人比较倾向下面两种方案
+        - 方案一：通过withLoadStateFooter实现，和上拉加载更多用同一套布局，同一个adapter。【参考本demo】
+        - 方案二：通过ConcatAdapter.addAdapter实现，专门显示加载更多
 
 - Animation 动画： 下拉刷新场景通过属性动画实现
     - [官方文档](https://developer.android.google.cn/training/animation)

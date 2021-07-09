@@ -1,11 +1,7 @@
 package com.longjunhao.wanjetpack.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
@@ -23,43 +19,60 @@ class FooterAdapter(
     private val retry: () -> Unit
 ) : LoadStateAdapter<FooterViewHolder>() {
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        loadState: LoadState
-    ) = FooterViewHolder(parent, retry)
+    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState) =
+        FooterViewHolder(
+            ListItemFooterBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ),
+            retry
+        )
 
-    override fun onBindViewHolder(
-        holder: FooterViewHolder,
-        loadState: LoadState
-    ) = holder.bind(loadState)
+    override fun onBindViewHolder(holder: FooterViewHolder, loadState: LoadState) {
+        holder.bind(loadState)
+    }
+
+    /**
+     * 1. 如果直接返回true的话，首次进入界面加载时，会执行两次网络请求，且RecyclerView会向下滚动一段距离。
+     *    所以需要加上loadState.endOfPaginationReached= true的条件。
+     *
+     * 2. 注意is的优先级比||、 &&的优先级高，所以：
+     *    a is b && c 是 (a is b) && c 的意思
+     *    a is b || c 是 (a is b) || c 的意思
+     *
+     */
+    override fun displayLoadStateAsItem(loadState: LoadState): Boolean {
+        return loadState is LoadState.Loading
+                || loadState is LoadState.Error
+                || (loadState is LoadState.NotLoading && loadState.endOfPaginationReached)
+    }
 }
 
 class FooterViewHolder(
-    parent: ViewGroup,
+    val binding: ListItemFooterBinding,
     retry: () -> Unit
-) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context)
-        .inflate(R.layout.list_item_footer, parent, false)
-) {
-    private val binding = ListItemFooterBinding.bind(itemView)
-    private val progressBar: ProgressBar = binding.progressBar
-    private val errorMsg: TextView = binding.errorMsg
-    private val retry: Button = binding.retryButton
-        .also {
-            it.setOnClickListener { retry() }
-        }
+) : RecyclerView.ViewHolder(binding.root) {
 
-    /**
-     * todo 遗留问题：当所有数据都加载后，应该在FooterView上显示“已经到底了”之类的。
-     */
+    init {
+        binding.retry.setOnClickListener {
+            retry()
+        }
+    }
+
     fun bind(loadState: LoadState) {
-        Log.d("FooterAdapter", "bind: ljh loadState=$loadState")
-        if (loadState is LoadState.Error) {
-            errorMsg.text = loadState.error.localizedMessage
+        binding.apply {
+
+            if (loadState is LoadState.Error) {
+                msg.text = loadState.error.localizedMessage
+            } else if (loadState.endOfPaginationReached) {
+                msg.text = binding.root.resources.getString(R.string.load_end)
+            }
+
+            progressBar.isVisible = loadState is LoadState.Loading
+            retry.isVisible = loadState is LoadState.Error
+            msg.isVisible = loadState is LoadState.Error || loadState.endOfPaginationReached
         }
 
-        progressBar.isVisible = loadState is LoadState.Loading
-        retry.isVisible = loadState is LoadState.Error
-        errorMsg.isVisible = loadState is LoadState.Error
     }
 }

@@ -13,5 +13,6 @@
     <string name="register_fail">注册错误，请重重新输入</string>
     <string name="logout">退出登录</string>
     <string name="load_error">加载失败，请点击重试</string>
+    <string name="load_end">已加载全部内容…</string>
     <string name="no_net">请检查网络是否连接…</string>
 </resources>
