@@ -11,5 +11,6 @@ import com.google.gson.annotations.SerializedName
 
 data class ProjectCategory(
     @field:SerializedName("id") val id: Int,
-    @field:SerializedName("name") val name: String
+    @field:SerializedName("name") val name: String,
+    var isSelected: Boolean
 )

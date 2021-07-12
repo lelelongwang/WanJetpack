@@ -6,7 +6,6 @@ import androidx.paging.cachedIn
 import com.longjunhao.wanjetpack.data.ApiArticle
 import com.longjunhao.wanjetpack.data.ApiResponse
 import com.longjunhao.wanjetpack.data.WanJetpackRepository
-import com.longjunhao.wanjetpack.data.project.ProjectCategory
 import com.longjunhao.wanjetpack.util.API_RESPONSE_NO_NET
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -26,10 +25,6 @@ class ProjectViewModel @Inject constructor(
 
     private var currentQueryValue: Int? = null
     private var currentSearchResult: Flow<PagingData<ApiArticle>>? = null
-
-    val currentSelectedItem: MutableLiveData<ProjectCategory> by lazy {
-        MutableLiveData<ProjectCategory>()
-    }
 
     val projectCategory = liveData {
         try {

@@ -1,7 +1,6 @@
 package com.longjunhao.wanjetpack.ui.project
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +31,7 @@ class ProjectFragment : Fragment() {
     private var homeJob: Job? = null
     private val viewModel: ProjectViewModel by viewModels()
     private lateinit var binding: FragmentProjectBinding
+    private lateinit var categoryAdapter: ProjectCategoryAdapter
     private lateinit var projectAdapter: ProjectAdapter
 
     override fun onCreateView(
@@ -40,19 +40,20 @@ class ProjectFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentProjectBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
 
-        val categoryAdapter = ProjectCategoryAdapter(viewModel)
+        categoryAdapter = ProjectCategoryAdapter { category -> adapterCategoryOnClick(category) }
         projectAdapter = ProjectAdapter { apiArticle, position -> adapterFavoriteOnClick(apiArticle, position) }
         binding.projectCategoryList.adapter = categoryAdapter
         binding.projectList.adapter = projectAdapter.withLoadStateFooter(
             FooterAdapter(projectAdapter::retry)
         )
-        subscribeUi(categoryAdapter)
+        subscribeUi()
 
         return binding.root
     }
 
-    private fun subscribeUi(categoryAdapter: ProjectCategoryAdapter){
+    private fun subscribeUi(){
         binding.swipeRefreshLayout.apply {
             setColorSchemeResources(R.color.jetpack_green_900)
             setProgressBackgroundColorSchemeResource(R.color.jetpack_green_500)
@@ -66,27 +67,33 @@ class ProjectFragment : Fragment() {
             }
         }
 
-        viewModel.projectCategory.observe(viewLifecycleOwner, Observer {
-            if (it.errorCode == 0) {
-                categoryAdapter.submitList(it.data)
-                viewModel.currentSelectedItem.postValue(it.data?.get(0))
-            } else if (it.errorCode == API_RESPONSE_NO_NET) {
+        viewModel.projectCategory.observe(viewLifecycleOwner, Observer { response ->
+            if (response.errorCode == 0) {
+                categoryAdapter.submitList(response.data)
+                //默认加载第一个项目分类
+                response.data?.let {
+                    adapterCategoryOnClick(it[0])
+                }
+            } else if (response.errorCode == API_RESPONSE_NO_NET) {
                 Snackbar.make(binding.root, getString(R.string.no_net), Snackbar.LENGTH_LONG).show()
             }
         })
-        viewModel.currentSelectedItem.observe(viewLifecycleOwner, Observer {
-            Log.d("TAG", "subscribeUi: ljh it${it.id}+ name${it.name}")
-            updateSelectItem(it)
-        })
     }
 
-    private fun updateSelectItem(projectCategory: ProjectCategory) {
+    /**
+     * todo 遗留问题：每次点击时，project_list并没有滚动到最顶部
+     */
+    private fun adapterCategoryOnClick(projectCategory: ProjectCategory) {
+        categoryAdapter.currentList.forEach {
+            it.isSelected = false
+        }
+        projectCategory.isSelected = true
+        binding.toolbarText.text = projectCategory.name
+        categoryAdapter.notifyDataSetChanged()
+
         homeJob?.cancel()
         homeJob = lifecycleScope.launch {
-            //TODO toolbarText的值尽量在xml中设置
-            binding.toolbarText.text = projectCategory.name
             viewModel.getProjectArticle(projectCategory.id).collectLatest {
-                Log.d("TAG", "updateSelectItem: 测试。 it$it")
                 projectAdapter.submitData(it)
             }
         }

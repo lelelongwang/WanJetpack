@@ -32,7 +32,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:gravity="center"
-                    android:text="@string/tab_project"
                     android:textAppearance="?attr/textAppearanceHeadline5"/>
 
             </com.google.android.material.appbar.MaterialToolbar>
