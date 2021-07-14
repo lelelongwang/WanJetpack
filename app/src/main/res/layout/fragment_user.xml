@@ -50,7 +50,7 @@
             android:paddingEnd="@dimen/card_side_margin"
             android:paddingStart="@dimen/card_side_margin"
             android:paddingTop="@dimen/header_margin"
-            android:layout_marginTop="?attr/actionBarSize">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/login_image"

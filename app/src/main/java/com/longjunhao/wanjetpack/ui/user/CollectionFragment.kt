@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.paging.LoadState
 import com.longjunhao.wanjetpack.R
 import com.longjunhao.wanjetpack.adapter.CollectionArticleAdapter
@@ -44,6 +45,10 @@ class CollectionFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: CollectionArticleAdapter){
+
+        binding.toolbar.setNavigationOnClickListener { view ->
+            view.findNavController().navigateUp()
+        }
         binding.swipeRefreshLayout.apply {
             setColorSchemeResources(R.color.jetpack_green_900)
             setProgressBackgroundColorSchemeResource(R.color.jetpack_green_500)
