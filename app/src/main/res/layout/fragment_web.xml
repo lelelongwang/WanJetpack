@@ -10,6 +10,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".ui.web.WebFragment">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -21,12 +22,10 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_back_no_circle"
-                app:contentInsetStart="0dp"
-                app:layout_collapseMode="parallax">
+                app:contentInsetStart="0dp">
 
                 <TextView
                     android:id="@+id/toolbarText"
@@ -36,7 +35,8 @@
                     android:text=""
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:textAppearance="?attr/textAppearanceHeadline5"/>
+                    android:textAppearance="?attr/textAppearanceHeadline5"
+                    android:textColor="?attr/colorPrimaryDark"/>
 
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
@@ -52,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:overScrollMode="never"
+                android:fitsSystemWindows="true"
                 android:background="@android:color/transparent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

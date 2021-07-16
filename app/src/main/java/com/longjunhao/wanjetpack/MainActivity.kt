@@ -1,5 +1,6 @@
 package com.longjunhao.wanjetpack
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +37,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        //Kotlin反射：去掉沉侵式后状态栏显示灰色阴影的问题。
+        try {
+            val decorView = window.decorView::class.java
+            val field = decorView.getDeclaredField("mSemiTransparentBarColor")
+            field.isAccessible = true
+            field.setInt(window.decorView, Color.TRANSPARENT)
+        } catch (e: Exception) {
+        }
     }
 
 }

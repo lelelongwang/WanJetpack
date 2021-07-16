@@ -22,16 +22,19 @@
             android:fitsSystemWindows="true"
             android:theme="@style/Theme.WanJetpack.AppBarOverlay">
 
+            <!-- android:fitsSystemWindows="true"是为了处理当CollapsingToolbarLayout
+            折叠后MaterialToolbar还显示的问题，注意与 contentScrim 的区别。-->
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|snap"
+                app:statusBarScrim="?attr/colorPrimary"
+                android:fitsSystemWindows="true"
                 app:toolbarId="@id/toolbar">
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/toolbar"
-                    style="@style/Widget.MaterialComponents.Toolbar.Primary"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:contentInsetStart="0dp"
@@ -42,7 +45,8 @@
                         android:layout_height="?attr/actionBarSize"
                         android:gravity="center"
                         android:text="@string/tab_home"
-                        android:textAppearance="?attr/textAppearanceHeadline5"/>
+                        android:textAppearance="?attr/textAppearanceHeadline5"
+                        android:textColor="?attr/colorPrimaryDark"/>
 
                 </com.google.android.material.appbar.MaterialToolbar>
 

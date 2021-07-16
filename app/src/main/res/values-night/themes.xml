@@ -4,14 +4,20 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.WanJetpack" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
-        <item name="colorPrimary">@color/jetpack_green_night</item>
+        <item name="colorPrimary">@color/jetpack_green_500</item>
         <item name="colorOnPrimary">@color/jetpack_yellow_300</item>
         <item name="colorPrimaryDark">@color/jetpack_green_700</item>
+        <item name="colorSecondary">@color/jetpack_yellow_300</item>
+        <item name="colorSurface">@color/jetpack_green_900</item>
         <item name="colorOnSurface">@color/jetpack_white</item>
         <item name="colorAccent">@color/jetpack_green_300</item>
-        <item name="colorSurface">@color/jetpack_green_900</item>
-        <item name="colorSecondary">@color/jetpack_yellow_300</item>
-<!--        <item name="android:colorBackground">@color/jetpack_green_900</item>-->
+        <!--<item name="android:colorBackground">@color/jetpack_green_900</item>-->
+
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSplashscreenContent">?attr/colorPrimary</item>
     </style>
 
     <style name="Theme.WanJetpack" parent="Base.Theme.WanJetpack"/>
@@ -22,7 +28,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.WanJetpack.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
+    <style name="Theme.WanJetpack.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
+    </style>
+
+    <!--已经在 AppBarOverlay 中设置了背景色，就不用在Toolbar中设置了，避免重复绘制-->
+    <style name="Theme.WanJetpack.ToolBarOverlay" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary"/>
 
     <style name="TextAppearance.Sunflower.Toolbar.Text" parent="TextAppearance.MaterialComponents.Headline5" >
         <item name="android:textColor">?attr/colorOnSurface</item>

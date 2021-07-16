@@ -391,3 +391,36 @@ WanJetpack
     - [官方demo](https://github.com/android/views-widgets-samples/tree/main/WebView)
     - 本demo中跳转到WebFragment是通过 Bundle 传递参数，**没有**用通过 Navigation 的 Safe Args 导航实现
     - 本demo中的WebView适配了深色主题。
+
+- 启动界面：（在Android10上调试）
+    - 冷启动、热启动
+    - Splash Screen：展示品牌Logo或Slogan
+        - 如果只是单纯的显示个界面，只需要在themes里设置<item name="android:windowSplashscreenContent">@color/jetpack_green_500</item>即可。
+    - Advertisement Screen：展示节日活动或日常广告
+    - Guide Screen：演示重点功能，一般只展示一次
+    - 参考博客：[Android 12上全新的应用启动API，适配一下？](https://mp.weixin.qq.com/s/Gd_iGSIlxbDhf7CHeik6GQ)
+
+- **样式系统**和**沉侵模式**：（在Android10上调试）
+    - 本demo沉侵式方案。关键属性：windowTranslucentStatus、statusBarColor、fitsSystemWindows、mSemiTransparentBarColor、clipToPadding
+        1. 在themes中设置（或者通过代码设置） <item name="android:windowTranslucentStatus">true</item>。调试发现不设置 <item name="android:statusBarColor">@android:color/transparent</item> 也行。
+        2. 在布局中设置（或者通过代码设置） AppBarLayout 的属性 android:fitsSystemWindows="true"，是为了防止AppBarLayout显示在statusbar上。
+        2. 通过反射设置 decorView 的 mSemiTransparentBarColor 为透明即可。代码如下：
+        ```kotlin
+            try {
+                val decorView = window.decorView::class.java
+                val field = decorView.getDeclaredField("mSemiTransparentBarColor")
+                field.isAccessible = true
+                field.setInt(window.decorView, Color.TRANSPARENT)
+            } catch (e: Exception) {
+            }
+        ```
+    - 注意：statusbar 和 navigationbar 道理一样
+    - 参考文章：
+        - [Android 样式系统 | 主题背景和样式](https://mp.weixin.qq.com/s/07rXV6kTG5Sw06MH27Flyg)
+        - [Android 样式系统 | **常见的主题背景属性**](https://mp.weixin.qq.com/s/bPIXbaqr2-6Huyr_h8S62g)
+        - [Android 样式系统 | 主题背景属性](https://mp.weixin.qq.com/s/mygXtqPKag_2k3G_r_13_g)
+        - [手势导航 (一) | 开启全面屏体验](https://mp.weixin.qq.com/s/DEI4bcmKkRBySUjO2AYEJA)
+        - [手势导航 (二) | 处理视觉冲突](https://mp.weixin.qq.com/s/p_9Px7BH6DQGNYNqzPCWtw)
+        - [手势导航 (三) | 如何处理手势冲突](https://mp.weixin.qq.com/s/M-lA6DADpgcoMqpnn9zV5g)
+        - [手势导航 (四) | **沉浸模式**](https://mp.weixin.qq.com/s/8CpQOqulwh5AZO7LwMt87A)
+        - [Android沉浸式状态栏，看完这篇就够了！](https://blog.csdn.net/qq_34681580/article/details/103955191)

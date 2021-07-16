@@ -16,6 +16,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".ui.user.UserFragment">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -27,11 +28,9 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:contentInsetStart="0dp"
-                app:layout_collapseMode="parallax">
+                app:contentInsetStart="0dp">
 
                 <TextView
                     android:id="@+id/toolbarText"
@@ -39,7 +38,8 @@
                     android:layout_height="?attr/actionBarSize"
                     android:gravity="center"
                     android:text="@string/tab_user"
-                    android:textAppearance="?attr/textAppearanceHeadline5"/>
+                    android:textAppearance="?attr/textAppearanceHeadline5"
+                    android:textColor="?attr/colorPrimaryDark"/>
 
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
@@ -68,7 +68,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@id/login_image"
                 app:layout_constraintTop_toTopOf="@id/login_image"

@@ -11,5 +11,5 @@
     <color name="jetpack_white">#deffffff</color>
     <color name="jetpack_yellow_300">#f8f99f</color>
     <color name="jetpack_yellow_500">#ffff63</color>
-    <color name="project_category_background">#FFFFFFFF</color>
+    <color name="project_category_background">@color/jetpack_gray_50</color>
 </resources>

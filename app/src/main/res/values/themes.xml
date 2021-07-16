@@ -1,5 +1,57 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+<!-- 常见的主题背景属性：https://mp.weixin.qq.com/s/bPIXbaqr2-6Huyr_h8S62g
+颜色：
+    ?attr/colorPrimary 应用的主要颜色；
+    ?attr/colorSecondary 应用的次要颜色，通常作为主要颜色补充；
+    ?attr/colorOn[Primary, Secondary, Surface etc] 对应颜色的相反色；
+    ?attr/color[Primary, Secondary]Variant 给定颜色的另一种阴影；
+    ?attr/colorSurface 部件的表面颜色，如: 卡片、表格、菜单；
+    ?android:attr/colorBackground 屏幕的背景颜色；
+    ?attr/colorPrimarySurface 在浅色主题中的 colorPrimary 与深色主题背景中的 colorSurface 中做切换；
+    ?attr/colorError 显示错误时的颜色。
+
+    ?attr/colorControlNormal 正常状态下设置给 icon/controls 的颜色；
+    ?attr/colorControlActivated 激活模式下设置给 icons/controls 的颜色 (如: 单选框被勾选)；
+    ?attr/colorControlHighlight 设置给高亮控制界面的颜色 (如: ripples，列表选择器)；
+    ?android:attr/textColorPrimary 设置给文本的主要颜色；
+    ?android:attr/textColorSecondary 设置给文本的次要颜色。
+大小：
+    ?attr/listPreferredItemHeight 列表项的标准高度 (最小值)；
+    ?attr/actionBarSize 工具栏的高度。
+Drawables：
+    ?attr/selectableItemBackground 可交互条目在 ripple 或者是高亮时的背景颜色 (针对外观)；
+    ?attr/selectableItemBackgroundBorderless 无边界的 ripple；
+    ?attr/dividerVertical 用于垂直分割可视化元素的 drawable；
+    ?attr/dividerHorizontal 用于水平分割可视化元素的 drawable。
+TextAppearance：
+    ?attr/textAppearanceHeadline1 默认为 96sp light 文本；
+    ?attr/textAppearanceHeadline2 默认为 60sp light 文本；
+    ?attr/textAppearanceHeadline3 默认为 48sp regular 文本；
+    ?attr/textAppearanceHeadline4 默认为 34sp regular 文本；
+    ?attr/textAppearanceHeadline5 默认为 24sp regular 文本；
+    ?attr/textAppearanceHeadline6 默认为 20sp medium 文本；
+    ?attr/textAppearanceSubtitle1 默认为 16sp regular 文本；
+    ?attr/textAppearanceSubtitle2 默认为 14sp medium 文本；
+    ?attr/textAppearanceBody1 默认为 16sp regular 文本；
+    ?attr/textAppearanceBody2 默认为 14sp regular 文本；
+    ?attr/textAppearanceCaption 默认为 12sp regular 文本；
+    ?attr/textAppearanceButton 默认为 14sp 全大写 medium 文本；
+    ?attr/textAppearanceOverline 默认为 10sp 全大写 regular 文本。
+形状：
+    ?attr/shapeAppearanceSmallComponent 默认圆角为 4dp，用于 Buttons、Chips、TextFields 等；
+    ?attr/shapeAppearanceMediumComponent 默认圆角为 4dp，用于 Cards、Dialogs、Date Pickers 等；
+    ?attr/shapeAppearanceLargeComponent 默认圆角为 0dp (其实是方形)，用于 Bottom Sheets 等。
+按钮风格：
+    ?attr/materialButtonStyle defaults 默认是 Contained 类型 (或者直接省略样式)；
+    ?attr/borderlessButtonStyle 设置为 Text 样式的按钮；
+    ?attr/materialButtonOutlinedStyle 设置为 Outlined 样式的按钮。
+Floats：
+    ?android:attr/disabledAlpha 默认关闭 Widget 的 alpha；
+    ?android:attr/primaryContentAlpha 设置给 foreground 元素的 alpha 值；
+    ?android:attr/secondaryContentAlpha 设置给 secondary 元素的 alpha 值。
+-->
+    textAppearanceHeadline5
     <!-- To see how these attributes are used, please visit https://material.io/develop/android/theming/color/ -->
     <!-- Base application theme. -->
     <style name="Base.Theme.WanJetpack" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -8,10 +60,20 @@
         <item name="colorOnPrimary">@color/jetpack_yellow_500</item>
         <item name="colorPrimaryDark">@color/jetpack_green_700</item>
         <item name="colorSecondary">@color/jetpack_yellow_500</item>
+        <item name="colorSurface">@color/jetpack_gray_50</item>
         <item name="colorOnSurface">@color/jetpack_black</item>
         <item name="colorAccent">@color/jetpack_green_700</item>
-        <item name="colorSurface">@color/jetpack_gray_50</item>
-<!--        <item name="android:colorBackground">@color/jetpack_green_500</item>-->
+        <!--<item name="android:colorBackground">@color/jetpack_green_500</item>-->
+        <!--<item name="android:windowBackground">@color/jetpack_green_500</item>-->
+        <!--<item name="android:windowDisablePreview">true</item>-->
+        <!--<item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
+
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+<!--        <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
+        <item name="android:windowSplashscreenContent">?attr/colorPrimary</item>
     </style>
 
     <style name="Theme.WanJetpack" parent="Base.Theme.WanJetpack"/>
@@ -21,7 +83,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.WanJetpack.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
+    <!--todo ： 注意深色主题里的AppBarOverlay，通过调试发现需要在深色主题里设置backgroundTint，为什么两个主题设置不一样，原因未知。-->
+    <style name="Theme.WanJetpack.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar"/>
+
+    <!--已经在 AppBarOverlay 中设置了背景色，就不用在Toolbar中设置了，避免重复绘制-->
+    <style name="Theme.WanJetpack.ToolBarOverlay" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary"/>
 
     <style name="TextAppearance.Sunflower.Toolbar.Text" parent="TextAppearance.MaterialComponents.Headline5" >
         <item name="android:textColor">?attr/colorOnSurface</item>

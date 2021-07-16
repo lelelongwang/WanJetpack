@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="project_category_background">#FF424242</color>
+    <color name="project_category_background">@color/jetpack_green_900</color>
 </resources>

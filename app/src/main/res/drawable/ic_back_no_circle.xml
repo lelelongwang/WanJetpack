@@ -19,7 +19,8 @@
     android:width="32dp"
     android:height="32dp"
     android:viewportWidth="32.0"
-    android:viewportHeight="32.0">
+    android:viewportHeight="32.0"
+    android:tint="?attr/colorPrimaryDark">
 
     <path
         android:name="arrow"
