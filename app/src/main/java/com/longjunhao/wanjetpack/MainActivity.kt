@@ -1,6 +1,7 @@
 package com.longjunhao.wanjetpack
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -40,7 +41,13 @@ class MainActivity : AppCompatActivity() {
         //Kotlin反射：去掉沉侵式后状态栏显示灰色阴影的问题。
         try {
             val decorView = window.decorView::class.java
-            val field = decorView.getDeclaredField("mSemiTransparentBarColor")
+            val field = if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
+                // Android10： StatusBar、NavigationBar都没有灰色阴影
+                decorView.getDeclaredField("mSemiTransparentBarColor")
+            } else {
+                // eg: Android8.1： 只有StatusBar没有灰色阴影。
+                decorView.getDeclaredField("mSemiTransparentStatusBarColor")
+            }
             field.isAccessible = true
             field.setInt(window.decorView, Color.TRANSPARENT)
         } catch (e: Exception) {
