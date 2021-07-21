@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<item
+        android:width="1080dp"
+        android:height="1920dp"
+        >
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="@android:color/white"
+                android:endColor="@android:color/white"/>
+        </shape>
+    </item>-->
+
+    <item android:drawable="?attr/colorSurface" />
+
+    <item
+        android:gravity="center"
+        android:width="72dp"
+        android:height="72dp">
+        <bitmap
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_android" />
+    </item>
+
+    <!--<item
+        android:gravity="bottom|center_horizontal"
+        android:width="72dp"
+        android:height="20dp"
+        android:bottom="30dp">
+        <bitmap android:alpha="0.7"
+            android:src="@drawable/ic_brand"/>
+    </item>-->
+</layer-list>

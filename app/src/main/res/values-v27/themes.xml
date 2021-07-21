@@ -19,6 +19,6 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
 
-        <item name="android:windowSplashscreenContent">?attr/colorPrimary</item>
+        <item name="android:windowSplashscreenContent">@drawable/ic_splash_content</item>
     </style>
 </resources>
