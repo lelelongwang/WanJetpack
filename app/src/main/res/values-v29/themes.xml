@@ -18,8 +18,8 @@
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
-        <item name="android:enforceNavigationBarContrast">false</item>
         <item name="android:enforceStatusBarContrast">false</item>
+        <item name="android:enforceNavigationBarContrast">false</item>
 
         <!-- 启动界面        -->
         <item name="android:windowSplashscreenContent">@drawable/ic_splash_content</item>

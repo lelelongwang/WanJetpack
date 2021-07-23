@@ -68,11 +68,15 @@ Floats：
         <!--<item name="android:windowDisablePreview">true</item>-->
         <!--<item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
 
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
+        <!-- 沉侵式       -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+
 <!--        <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
+
+        <!-- 启动界面        -->
         <item name="android:windowSplashscreenContent">@drawable/ic_splash_content</item>
     </style>
 
