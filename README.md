@@ -424,3 +424,7 @@ WanJetpack
         - [手势导航 (三) | 如何处理手势冲突](https://mp.weixin.qq.com/s/M-lA6DADpgcoMqpnn9zV5g)
         - [手势导航 (四) | **沉浸模式**](https://mp.weixin.qq.com/s/8CpQOqulwh5AZO7LwMt87A)
         - [Android沉浸式状态栏，看完这篇就够了！](https://blog.csdn.net/qq_34681580/article/details/103955191)
+
+- 触摸手势
+    - [手势导航文档](https://developer.android.google.cn/training/gestures/gesturenav)
+    - [拖动和缩放文档](https://developer.android.google.cn/training/gestures/scale)

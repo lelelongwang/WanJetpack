@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.Theme.WanJetpack" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/jetpack_green_500</item>
+        <item name="colorOnPrimary">@color/jetpack_yellow_300</item>
+        <item name="colorPrimaryDark">@color/jetpack_green_700</item>
+        <item name="colorSecondary">@color/jetpack_yellow_300</item>
+        <item name="colorSurface">@color/jetpack_green_900</item>
+        <item name="colorOnSurface">@color/jetpack_white</item>
+        <item name="colorAccent">@color/jetpack_green_300</item>
+        <!--<item name="android:colorBackground">@color/jetpack_green_900</item>-->
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:enforceStatusBarContrast">false</item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+
+        <item name="android:windowSplashscreenContent">@drawable/ic_splash_content</item>
+    </style>
+</resources>
