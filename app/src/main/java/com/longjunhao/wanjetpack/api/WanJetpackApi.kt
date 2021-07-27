@@ -16,10 +16,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 /**
  * .WanJetpackApi
@@ -127,12 +124,22 @@ interface WanJetpackApi {
      * 1. 不管id是否在收藏列表，都可以取消收藏成功。即存在的id可以重复取消成功，不存在的id也可以取消成功
      * 2. 取消收藏返回的json为{"data":null,"errorCode":0,"errorMsg":""}，故返回值中的ApiArticle是随便写的
      *
-     * todo 还有一种常见没有实现：我的收藏页面（该页面包含自己录入的内容）取消收藏
      * todo 网站、网址的收藏、编辑、删除没有实现
      */
     @POST("lg/uncollect_originId/{id}/json")
     suspend fun unCollect(
         @Path("id") id: Int
+    ): ApiResponse<ApiArticle>
+
+    /**
+     * 我的收藏界面，取消收藏
+     *
+     */
+    @FormUrlEncoded
+    @POST("lg/uncollect/{id}/json")
+    suspend fun unCollect(
+        @Path("id") id: Int,
+        @Field("originId") originId: Int = -1
     ): ApiResponse<ApiArticle>
 
     /**

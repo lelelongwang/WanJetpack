@@ -20,3 +20,5 @@ package com.longjunhao.wanjetpack.util
  * Constants used throughout the app.
  */
 const val API_RESPONSE_NO_NET = -2021
+const val API_RESPONSE_SUCCESS = 0
+const val API_RESPONSE_LOGIN_INVALID = -1001

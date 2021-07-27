@@ -16,6 +16,7 @@ data class ApiArticle(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     @field:SerializedName("id") val id: Int,
+    @field:SerializedName("originId") val originId: Int,
 
     @field:SerializedName("author") val author: String,
     @field:SerializedName("shareUser") val shareUser: String,

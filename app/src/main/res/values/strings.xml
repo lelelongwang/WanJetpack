@@ -15,4 +15,8 @@
     <string name="load_error">加载失败，请点击重试</string>
     <string name="load_end">已加载全部内容…</string>
     <string name="no_net">请检查网络是否连接…</string>
+    <string name="collect_success">已成功收藏</string>
+    <string name="un_collect_success">已成功取消收藏</string>
+    <string name="login_invalid">登录失效，请重新登录</string>
+    <string name="unknown_bug">未知的场景，请提bug</string>
 </resources>

@@ -430,3 +430,7 @@ WanJetpack
 - 触摸手势
     - [手势导航文档](https://developer.android.google.cn/training/gestures/gesturenav)
     - [拖动和缩放文档](https://developer.android.google.cn/training/gestures/scale)
+    - 左滑删除：
+        - 参考demo：[PagingSample](https://github.com/android/architecture-components-samples/tree/main/PagingSample)
+        - 官方方案：[使用ItemTouchHelper实现拖拽和侧滑删除](https://www.jianshu.com/p/0c1984bc9383)
+        - [Android RecycleView实现左滑删除的两种方式？](https://blog.csdn.net/yyxhzdm/article/details/111212743)

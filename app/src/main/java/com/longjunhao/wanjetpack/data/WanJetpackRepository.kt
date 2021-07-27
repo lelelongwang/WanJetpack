@@ -129,6 +129,10 @@ class WanJetpackRepository @Inject constructor(
         return api.unCollect(id)
     }
 
+    suspend fun unCollect(id: Int, originId: Int): ApiResponse<ApiArticle> {
+        return api.unCollect(id, originId)
+    }
+
     fun getSearchArticle(keyword: String): Flow<PagingData<ApiArticle>> {
         return Pager(
             config = PagingConfig(
