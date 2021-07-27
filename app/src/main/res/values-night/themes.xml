@@ -14,13 +14,13 @@
         <!--<item name="android:colorBackground">@color/jetpack_green_900</item>-->
 
         <!-- 沉侵式       -->
-        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
 
         <!-- 启动界面        -->
-        <item name="android:windowSplashscreenContent">@drawable/ic_splash_content</item>
+        <!--<item name="android:windowSplashscreenContent">@drawable/ic_splash_content</item>-->
     </style>
 
     <style name="Theme.WanJetpack" parent="Base.Theme.WanJetpack"/>

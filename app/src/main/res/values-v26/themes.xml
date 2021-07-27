@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.Theme.WanJetpack" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/jetpack_green_500</item>
+        <item name="colorOnPrimary">@color/jetpack_yellow_500</item>
+        <item name="colorPrimaryDark">@color/jetpack_green_700</item>
+        <item name="colorSecondary">@color/jetpack_yellow_500</item>
+        <item name="colorSurface">@color/jetpack_gray_50</item>
+        <item name="colorOnSurface">@color/jetpack_black</item>
+        <item name="colorAccent">@color/jetpack_green_700</item>
+
+        <!-- 沉侵式       -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- 启动界面        -->
+        <item name="android:windowSplashscreenContent">@drawable/ic_splash_content</item>
+    </style>
+</resources>

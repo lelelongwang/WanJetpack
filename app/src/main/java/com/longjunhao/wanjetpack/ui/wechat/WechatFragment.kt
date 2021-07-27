@@ -66,7 +66,7 @@ class WechatFragment : Fragment() {
         // Set the icon and text for each tab
         TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
             tab.text = titles[position]
-            tab.setIcon(R.drawable.ic_launcher_foreground)
+            tab.setIcon(R.drawable.ic_tab_selector)
         }.attach()
     }
 }

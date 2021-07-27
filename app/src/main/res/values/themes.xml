@@ -73,11 +73,12 @@ Floats：
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowLightStatusBar">true</item>
 
 <!--        <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
 
         <!-- 启动界面        -->
-        <item name="android:windowSplashscreenContent">@drawable/ic_splash_content</item>
+        <!--<item name="android:windowSplashscreenContent">@drawable/ic_splash_content</item>-->
     </style>
 
     <style name="Theme.WanJetpack" parent="Base.Theme.WanJetpack"/>

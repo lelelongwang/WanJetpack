@@ -47,8 +47,8 @@ class HomeViewPagerFragment : Fragment() {
 
     private fun getTabIcon(position: Int): Int{
         return when (position) {
-            HOME_ARTICLE_INDEX -> R.drawable.ic_launcher_foreground
-            VIEW_PAGER_INDEX_TWO -> R.drawable.ic_launcher_foreground
+            HOME_ARTICLE_INDEX -> R.drawable.ic_tab_selector
+            VIEW_PAGER_INDEX_TWO -> R.drawable.ic_tab_selector
             else -> throw IndexOutOfBoundsException()
         }
     }

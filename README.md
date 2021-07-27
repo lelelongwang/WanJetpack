@@ -393,6 +393,8 @@ WanJetpack
     - 本demo中的WebView适配了深色主题。
 
 - 启动界面：（在Android10上调试）
+    - 方案：通过windowSplashscreenContent属性或者SplashActivity界面
+        - 注意 windowSplashscreenContent属性是在Android8.0（v26）上才有的，如果在之前的版本上适配启动界面，应该新增个Activity，即 SplashActivity。
     - 冷启动、热启动
     - Splash Screen：展示品牌Logo或Slogan
         - 如果只是单纯的显示个界面，只需要在themes里设置<item name="android:windowSplashscreenContent">@color/jetpack_green_500</item>即可。

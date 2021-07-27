@@ -59,10 +59,12 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
         }*/
 
-        // todo 后期可以把沉侵式统一在themes中设置，或者统一在代码中设置
+        // todo:
+        //  1.后期可以把沉侵式统一在themes中设置，或者统一在代码中设置
+        //  2.Android6.0上没有SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR属性
         when {
-            Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1 -> {
-                //以下代码实现了Android8.1上导航栏和状态栏的沉侵式，但是要结合themes中的设置
+            Build.VERSION.SDK_INT in Build.VERSION_CODES.M..Build.VERSION_CODES.O_MR1 -> {
+                //以下代码实现了Android6.0.1 、 Android8.1上导航栏和状态栏的沉侵式，但是要结合themes中的设置
                 window.clearFlags(
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or
                             WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
@@ -70,6 +72,7 @@ class MainActivity : AppCompatActivity() {
                 //window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS )
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
             }
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
