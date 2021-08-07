@@ -1,6 +1,17 @@
 WanJetpack
 ==========
 
+### 简介
+玩Android demo。用Jetpack MVVM开发架构、单Activity多Fragment项目设计，项目结构清晰，代码简洁优雅，追求最官方的实现方式。用到以下知识点：
+LiveData、ViewModel、DataBinding（包括双向绑定、BindingAdapter的使用）、ViewBinding、coroutines（包含flow、suspend、livedata协程构造器、flow协程构造器的使用）、Hilt、Paging3（包含RemoteMediator、加载状态）、Room、Navigation（通过ViewModel共享数据）、Banner（kotlin简单实现）、TabLayout、BottomNavigationView、RecycleView（包含ListAdapter、ConcatAdapter、PagingDataAdapter的使用）、ViewPager2、Glide、Cookie、Retrofit2、启动页面、深色主题、沉浸式模式、Kotlin高阶函数。
+
+### 截图
+
+![深色主题截图](images/screenshots/wanjetpack_night.png)
+
+
+![默认模式截图](images/screenshots/wanjetpack.png)
+
 ### 参考demo
 
 - [Sunflower](https://github.com/android/sunflower)
@@ -246,7 +257,7 @@ WanJetpack
 
 - [Room 库](https://developer.android.google.cn/topic/libraries/architecture/room?hl=zh_cn)
     - [官方指南](https://developer.android.google.cn/training/data-storage/room?hl=zh_cn)
-    - [官方 demo](略)
+    - [官方 demo]()
 
 - [DataStore]()
     - [使用 Jetpack DataStore 进行数据存储](https://mp.weixin.qq.com/s/26Uxotf3-oceKUbrujqX3w)

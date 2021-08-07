@@ -35,6 +35,10 @@
                 android:text="@{projectCategory.name}"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:gravity="center"
+                android:maxLines="1"
+                android:ellipsize="end"
+                app:autoSizeMinTextSize="16sp"
+                app:autoSizeTextType="uniform"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
